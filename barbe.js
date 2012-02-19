@@ -5,6 +5,7 @@
     "Barbe:nomunge";
     var Barbe = {
         html: {},
+        templates: {},
         templateSystem: {
             compile: Mustache.to_html,
             type: ['text/html']
@@ -16,17 +17,19 @@
             }
             else {
                 Barbe.html[name] = str_template;
-                // TODO move to Barbe.templates[name]
-                Barbe[name] = function (data) {
+                Barbe.templates[name] = function (data) {
+                    var html;
                     data = data || {};
-                    return Barbe.templateSystem.compile(Barbe.html[name], data, Barbe.html);
-                };
-                if (typeof anchor !== "undefined") {
-                    var element = document.getElementById(anchor);
-                    if (element !== null) {
-                        element.innerHTML = Barbe[name]();
+                    html = Barbe.templateSystem.compile(Barbe.html[name], data, Barbe.html);
+                    if (typeof anchor !== "undefined") {
+                        var element = document.getElementById(anchor);
+                        if (element !== null) {
+                            element.innerHTML = html;
+                        }
                     }
-                }
+                    return html;
+                };
+                
             }
         },
         grab: function () {
@@ -44,7 +47,10 @@
     Barbe.View = function () {
         var args = arguments[0] || {};
         this.template = args.template;
-        this.anchor = args.anchor;
+        this.anchor = document.getElementById(args.anchor);
+        if (this.anchor === null) {
+            throw "[Barbe] #" + args.anchor + " not found."
+        }
         // function (data, callback) where data is the parameters for the api call and callback is this.castAnchor
         this.provider = args.provider;
         this.data = args.data || {};
@@ -55,23 +61,20 @@
             response = {array: response};
         }
         this.response = response;
-        if (Barbe[this.template] !== undefined) {
-            this.view = Barbe[this.template](response, true);
+        if (Barbe.templates[this.template] !== undefined) {
+            this.view = Barbe.templates[this.template](response, true);
             return this.view;
         }
     };
     Barbe.View.prototype.castAnchor = function (response, after) {
-        var rendered, element;
-
-        rendered = this.render(response);
-        element = document.getElementById(this.anchor);
-        if (element !== null) {
-            element.innerHTML = rendered;
-            after && after.call(this, element);
-        }
+        var rendered = this.render(response);
+        this.loader && this.loader.remove();
+        this.anchor.innerHTML = rendered;
+        after && after.call(this, this.anchor);
     };
     Barbe.View.prototype.draw = function (after) {
         if (this.provider !== undefined) {
+            this.loader = new Barbe.Loader(this.anchor);
             var callback = function (response) {
                 this.castAnchor(response, after);
             };
@@ -80,6 +83,21 @@
         else {
             this.castAnchor(this.data, after);
         }
+    };
+
+    // Barbe.Loader
+    Barbe.Loader = function (anchor) {
+        this.anchor = anchor;
+        this.div = document.createElement("div");
+        this.div.className = "barbe-loader";
+        this.div.id = "barbe_loader";
+        while (this.anchor.hasChildNodes()) {
+            this.anchor.removeChild(this.anchor.lastChild);
+        }
+        this.anchor.appendChild(this.div);
+    };
+    Barbe.Loader.prototype.remove = function () {
+        //this.anchor.removeChild(this.div);
     };
 
     window.Barbe = Barbe;
