@@ -10,6 +10,7 @@
 <div id="with_data"></div>
 <div id="with_altered_data"></div>
 <div id="simple_draw"></div>
+<div id="anchor"></div>
 
 <script type="text/html" id="template_simple">
 Simple test with no data
@@ -25,6 +26,14 @@ Test with altered data: {{ test }} / {{ testUppercase }}
 
 <script type="text/html" id="template_simple_draw">
 drawing function
+</script>
+
+<script type="text/html" id="template_anchor" data-anchor="anchor">
+template with an anchor
+</script>
+
+<script type="text/html" id="template_anchor_and_callback" data-anchor="anchor" data-callback="callback">
+template with an anchor and callback
 </script>
 
 <script type="text/javascript" src="../js/mustache.js"></script>
@@ -62,6 +71,9 @@ var simpleDraw = new Barbe.View({
 }).draw(function (template) {
     template.style.color = "purple";
 });
+
+Barbe.template_anchor();
+Barbe.template_anchor_and_callback()
 
 </script>
 

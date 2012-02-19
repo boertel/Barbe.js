@@ -7,19 +7,26 @@
         html: {},
         templateSystem: {
             funct: Mustache.to_html,
-            type: ['text/html'],
+            type: ['text/html']
         },
 
-        add: function (name, str_template) {
+        add: function (name, str_template, anchor) {
             if (Barbe.html.hasOwnProperty(name)) {
                 throw "You've already got a template by the name: \"" + name + "\"";
             }
             else {
                 Barbe.html[name] = str_template;
+                // TODO move to Barbe.templates[name]
                 Barbe[name] = function (data) {
                     data = data || {};
                     return Barbe.templateSystem.funct(Barbe.html[name], data, Barbe.html);
                 };
+                if (typeof anchor !== "undefined") {
+                    var element = document.getElementById(anchor);
+                    if (element !== null) {
+                        element.innerHTML = Barbe[name]();
+                    }
+                }
             }
         },
         grab: function () {
@@ -27,7 +34,7 @@
             for(var i=0, len=scripts.length; i<len; i++) {
                 var s = scripts[i];
                 if (Barbe.templateSystem.type.indexOf(s.type) !== -1) {
-                    Barbe.add(s.id, s.innerHTML);
+                    Barbe.add(s.id, s.innerHTML, s.getAttribute("data-anchor"));
                 }
             }
         }
