@@ -6,7 +6,7 @@
     var Barbe = {
         html: {},
         templateSystem: {
-            funct: Mustache.to_html,
+            compile: Mustache.to_html,
             type: ['text/html']
         },
 
@@ -19,7 +19,7 @@
                 // TODO move to Barbe.templates[name]
                 Barbe[name] = function (data) {
                     data = data || {};
-                    return Barbe.templateSystem.funct(Barbe.html[name], data, Barbe.html);
+                    return Barbe.templateSystem.compile(Barbe.html[name], data, Barbe.html);
                 };
                 if (typeof anchor !== "undefined") {
                     var element = document.getElementById(anchor);
@@ -31,7 +31,7 @@
         },
         grab: function () {
             scripts = document.scripts || document.getElementsByTagName('script');
-            for(var i=0, len=scripts.length; i<len; i++) {
+            for(var i = 0, len = scripts.length; i < len; i++) {
                 var s = scripts[i];
                 if (Barbe.templateSystem.type.indexOf(s.type) !== -1) {
                     Barbe.add(s.id, s.innerHTML, s.getAttribute("data-anchor"));
