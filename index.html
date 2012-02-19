@@ -1,0 +1,69 @@
+<!doctype html>
+<html>
+<head>
+	<title>Barbe.js</title>
+</head>
+
+<body>
+
+<div id="simple"></div>
+<div id="with_data"></div>
+<div id="with_altered_data"></div>
+<div id="simple_draw"></div>
+
+<script type="text/html" id="template_simple">
+Simple test with no data
+</script>
+
+<script type="text/html" id="template_data">
+Test with data: {{ test }}
+</script>
+
+<script type="text/html" id="template_altered_data">
+Test with altered data: {{ test }} / {{ testUppercase }}
+</script>
+
+<script type="text/html" id="template_simple_draw">
+drawing function
+</script>
+
+<script type="text/javascript" src="../js/mustache.js"></script>
+<script type="text/javascript" src="./barbe.js"></script>
+
+<script type="text/javascript">
+var simple = new Barbe.View({
+    template: "template_simple",
+    anchor: "simple"
+}).draw();
+
+var simpleData = new Barbe.View({
+    template: "template_data",
+    anchor: "with_data",
+    data: {
+        test: "this is data coming from the view."
+    }
+}).draw();
+
+var alteredData = new Barbe.View({
+    template: "template_altered_data",
+    anchor: "with_altered_data",
+    data: {
+        test: "this is data coming from the view."
+    },
+    provider: function (data, callback) {
+        data.testUppercase = data.test.toUpperCase();
+        callback.call(this, data);
+    }
+}).draw();
+
+var simpleDraw = new Barbe.View({
+    template: "template_simple_draw",
+    anchor: "simple_draw"
+}).draw(function (template) {
+    template.style.color = "purple";
+});
+
+</script>
+
+</body>
+</html>
