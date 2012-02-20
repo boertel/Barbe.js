@@ -6,9 +6,12 @@
     var Barbe = {
         html: {},
         templates: {},
-        templateSystem: {
-            compile: Mustache.to_html,
-            type: ['text/html']
+        settings: {
+            template: {
+                compile: Mustache.to_html,
+                type: ['text/html']
+            },
+            ajax: $.ajax
         },
 
         add: function (name, str_template, anchor) {
@@ -36,7 +39,7 @@
             scripts = document.scripts || document.getElementsByTagName('script');
             for(var i = 0, len = scripts.length; i < len; i++) {
                 var s = scripts[i];
-                if (Barbe.templateSystem.type.indexOf(s.type) !== -1) {
+                if (Barbe.settings.template.type.indexOf(s.type) !== -1) {
                     Barbe.add(s.id, s.innerHTML, s.getAttribute("data-anchor"));
                 }
             }
@@ -49,12 +52,13 @@
         this.template = args.template;
         this.anchor = document.getElementById(args.anchor);
         if (this.anchor === null) {
-            throw "[Barbe] #" + args.anchor + " not found."
+            throw "[Barbe] #" + args.anchor + " not found.";
         }
         // function (data, callback) where data is the parameters for the api call and callback is this.castAnchor
         this.provider = args.provider;
         this.data = args.data || {};
     };
+    Barbe.View.helpers = {};
     Barbe.View.prototype.render = function (response) {
         // Mustache doesn't like array as data, so we have to create a dumb object named "array" that contained the array
         if (Array.isArray(response)) {
@@ -72,13 +76,25 @@
         this.anchor.innerHTML = rendered;
         after && after.call(this, this.anchor);
     };
+    Barbe.View.prototype.ajax = function (data) {
+        var that = this;
+        var monkeySuccess = function (response) {
+            response = that.provider.success && that.provider.success.call(that, response);
+            that.castAnchor.call(that, response);
+        };
+        that.ajaxParams = this.provider;
+        that.ajaxParams.success = monkeySuccess;
+        Barbe.settings.ajax(that.ajaxParams);
+    };
     Barbe.View.prototype.draw = function (after) {
         if (this.provider !== undefined) {
-            this.loader = new Barbe.Loader(this.anchor);
-            var callback = function (response) {
+            if (typeof this.provider === "function") {
+                response = this.provider.success && this.provider.success(this.data);
                 this.castAnchor(response, after);
-            };
-            this.provider.call(this, this.data, callback);
+            } else {
+                this.loader = new Barbe.Loader(this.anchor);
+                this.ajax.call(this, this.data);
+            }
         }
         else {
             this.castAnchor(this.data, after);
@@ -97,7 +113,7 @@
         this.anchor.appendChild(this.div);
     };
     Barbe.Loader.prototype.remove = function () {
-        //this.anchor.removeChild(this.div);
+        this.anchor.removeChild(this.div);
     };
 
     window.Barbe = Barbe;
