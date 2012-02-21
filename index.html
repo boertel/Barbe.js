@@ -1,6 +1,7 @@
 <!doctype html>
 <html>
 <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<title>Barbe.js</title>
     <link href="http://fonts.googleapis.com/css?family=Droid+Serif|Lustria|Droid+Sans+Mono" rel="stylesheet" type="text/css">
     <link rel="stylesheet" type="text/css" href="./barbe.css">
@@ -10,58 +11,114 @@
 
 <header>
     <h1><span class="barbe">Barbe</span>.js</h1>
-    <!--p class="definition">from the french, barbe, meaning beard</p-->
+    <p class="definition">– because a "barbe" (french for beard) contains a mustache.</p
 </header>
-<p>Attach a template to an anchor.</p>
+<p>Barbe is a Javascript Library that allows you to attach templates to specific elements on your page. It also populates templates from API responses and show automatically a loader during the loading.</p>
 
-<h2>Step by step</h2>
-<p>In this example, we use <a href="https://mustache.github.com" target="_blank">Mustache</a> templates.</p>
+<nav>
+    <ul>
+        <li><a href="#usage">Usage</a></li>
+        <li><a href="#options">More Options</a></li>
+        <li><a href="#code">Code</a></li>
+        <li><a href="#documentation">Documentation</a></li>
+    </ul>
+</nav>
+
+<h2 id="usage">Usage</h2>
+<p>In this short example, we use <a href="https://mustache.github.com" target="_blank">Mustache</a> templates.</p>
 
 <h3>1. Create your template</h3>
 <div class="code">
-&lt;script type="text/html" id="my_template" data-anchor="my_anchor"&gt;<br>&nbsp;&nbsp;&nbsp;&nbsp;This is a template building with {{ name }}.<br>&lt;/script&gt;
+<div class="language">Html</div>
+<code>&lt;script type="text/html" id="my_template" data-anchor="my_anchor"&gt;
+    &lt;p&gt;This is a template building with {{ name }}.&lt;/p&gt;
+&lt;/script&gt;
+</code>
 </div>
 
-<h3>2. Place your anchor</h3>
+<h3>2. Create your anchor in your html file</h3>
 <div class="code">
-&lt;div id="my_anchor"&gt;&lt/div&gt;
+<div class="language">Html</div>
+<code>&lt;div id="my_anchor"&gt;&lt/div&gt;</code>
 </div>
 
 <h3>3. Initialize the template</h3>
 <div class="code">
-&lt;script&gt;<br>&nbsp;&nbsp;&nbsp;Barbe.my_template({name: "Barbe.js"});<br>&lt;/script&gt;
+<div class="language">Javascript</div>
+<code>new Barbe.View("my_template", {
+    data: {name: "Barbe.js"}
+}).draw();
+</code>
 </div>
 
 <h3>4. Result</h3>
 <div class="code">
-&lt;div id="my_anchor"&gt;<br>&nbsp;&nbsp;&nbsp;&nbsp;This is a template building with Barbe.js.<br>&lt/div&gt;
+<div class="language">Html</div>
+<code>...
+&lt;div id="my_anchor"&gt;
+    &lt;p&gt;This is a template building with Barbe.js.&lt;/p&gt;
+&lt/div&gt;
+...</code>
 </div>
 
+<p>To see a full example, check out the github repository: <a href="http://github.com/boertel/barbe.js" target="_blank">boertel/barbe.js</a></p>
 
-<h2>More Options</h2>
-<h5>Use another template system</h5>
-<p>By default, Barbe is using <a href="https://mustache.github.com" target="_blank">Mustache</a> but you can use your favorite template system such as <a href="http://twitter.github.com/hogan.js/" target="_blank">Hogan</a> or <a href="http://handlebarsjs.com/" target="_blank">Handlersbar</a>.
+
+<h2 id="options">More Options</h2>
+
+<h5>Use another templating engine</h5>
+<p>By default, Barbe is using <a href="https://mustache.github.com" target="_blank">Mustache</a> but you can use your favorite templating engine such as <a href="http://twitter.github.com/hogan.js/" target="_blank">Hogan</a> or <a href="http://handlebarsjs.com/" target="_blank">Handlersbar</a>. You can find how to define the <code>compile</code> function for those two, below in the <a href="#">documentation</a>.
 <div class="code">
-Barbe.templateSystem.compile = Mustache.to_html;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">//</span>
-Barbe.templateSystem.type = ["text/html"];&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">//</span>
+<div class="language">Javascript</div>
+<code><span class="comment">// Function that compiles the template with data.</span>
+Barbe.settings.template.engine = Mustache.render;
+<span class="comment">// Type to identify templates.</span>
+Barbe.settings.template.type = ["text/html"];
+</code>
 </div>
 
 
 <h5>Populate a template with an API response</h5>
-<p>Most of the populated templates use an API response, that's why Barbe provides a easy way to populate the templates.</p>
+<p>Most of the populated templates use an API response, that's why Barbe provides a easy way to populate the templates. And in bonus, a loader<sup><a href="#loader">2</a></sup> is automatically inserted inside the anchor during the API call.</p>
 <div class="code">
-var view = new Barbe.View({<br>&nbsp;&nbsp;&nbsp;&nbsp;template: "api_template",<br>
-&nbsp;&nbsp;&nbsp;&nbsp;provider: function (data, callback) {<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$.ajax({<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;type: "get",<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;url: "/api/v1/user",<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;success: function (response) {,<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;callback.call(this, response);<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;});<br>
-&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+<div class="language">Javascript</div>
+<code>var view = new Barbe.View("api_template", {
+    url: "/api/v1/user",
+    success: function (response) {
+        <span class="comment">/* ... */</span>
+        <strong>return response;</strong>
+    }
 });
+</code>
 </div>
+<p><em>Note</em>: the second object, called <code>provider</code> is the same object that will be passed to jQuery <code>$.ajax</code> function<sup><a href="#">1</a></sup>. The <code>success</code> is overwritten to take the <code>response</code> and use it as data by the templating engine to create the HTML version of the template, so don't forget to <code>return response;</code> at the end of the function.</p>
+
+<h5>Execute a function on the data</h5>
+<p>Mustache does not provide a helper system, but sometimes we need to </p>
+<div class="code">
+<div class="language">Javascript</div>
+<code>var view = new Barbe.View({template: "api_template",
+    data: [{name: "John"}, {name: "Ben"}],
+    provider: function (response) {
+        for (var i = 0; i < response.length; i++) {
+            response[i].nameUpperCase = response[i].name.toUpperCase();
+        }
+        return response;
+    }
+});</code>
+</div>
+
+
+<h2 id="documentation">Documentation</h2>
+
+<div class="code">
+<div class="language">Javascript</div>
+<code></code>
+</div>
+
+
+<h2 id="code">Code</h2>
+<p>Source code is available  on GitHub: <a href="http://github.com/boertel/barbe.js" target="_blank">boertel/barbe.js</a>. Feel free to fork it, submit pull requests, report bugs, etc.</p>
 
 <footer>
     <ul>
@@ -69,78 +126,10 @@ var view = new Barbe.View({<br>&nbsp;&nbsp;&nbsp;&nbsp;template: "api_template",
     </ul>
 </footer>
 
-<!--div id="simple"></div>
-<div id="with_data"></div>
-<div id="with_altered_data"></div>
-<div id="simple_draw"></div>
-<div id="anchor"></div-->
 
-<script type="text/html" id="template_simple">
-Simple test with no data
-</script>
-
-<script type="text/html" id="template_data">
-Test with data: {{ test }}
-</script>
-
-<script type="text/html" id="template_altered_data">
-Test with altered data: {{ test }} / {{ testUppercase }}
-</script>
-
-<script type="text/html" id="template_simple_draw">
-drawing function
-</script>
-
-<script type="text/html" id="template_anchor" data-anchor="anchor">
-template with an anchor
-</script>
-
-<script type="text/html" id="template_anchor_and_callback" data-anchor="anchor" data-callback="callback">
-template with an anchor and callback
-</script>
-
-<script type="text/javascript" src="../js/mustache.js"></script>
-<script type="text/javascript" src="./barbe.js"></script>
-
-<script type="text/javascript">
-var simple = new Barbe.View({
-    template: "template_simple",
-    anchor: "simple"
-}).draw();
-
-var simpleData = new Barbe.View({
-    template: "template_data",
-    anchor: "with_data",
-    data: {
-        test: "this is data coming from the view."
-    }
-}).draw();
-
-var alteredData = new Barbe.View({
-    template: "template_altered_data",
-    anchor: "with_altered_data",
-    data: {
-        test: "this is data coming from the view."
-    },
-    provider: function (data, callback) {
-        data.testUppercase = data.test.toUpperCase();
-        callback.call(this, data);
-    }
-}).draw();
-
-var simpleDraw = new Barbe.View({
-    template: "template_simple_draw",
-    anchor: "simple_draw"
-}).draw(function (template) {
-    template.style.color = "purple";
-});
-
-Barbe.template_anchor();
-Barbe.template_anchor_and_callback()
-
-</script>
-
-<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+<script type="text/javascript" src="./js/jquery-1.7.1.min.js"></script>
+<script type="text/javascript" src="./js/mustache.js"></script>
+<script type="text/javascript" src="./js/barbe.js"></script>
 
 </body>
 </html>

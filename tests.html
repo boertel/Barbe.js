@@ -1,0 +1,267 @@
+<!doctype html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>Tests - Barbe.js</title>
+    <link href="http://fonts.googleapis.com/css?family=Droid+Serif|Lustria|Droid+Sans+Mono" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" type="text/css" href="./barbe.css">
+</head>
+
+<body>
+
+<h2>Examples for <a href="index.html">Barbe</a>.js</h2>
+<p>Here are a few examples how to use Barbe in different cases.</p>
+
+
+<h3>Static template</h3>
+
+<div class="code">
+<div class="language">Html</div>
+<code>&lt;script type="text/html" id="template_static" data-anchor="anchor_static"&gt;
+    This is a static template
+&lt;/script&gt;</code>
+</div>
+
+<div class="code">
+<div class="language">Javascript</div>
+<code>new Barbe.View("template_static").draw();</code>
+</div>
+
+<div class="result">
+    <div class="legend">Result</div>
+    <div id="anchor_static"></div>
+</div>
+
+<h3>Basic template that included a another template</h3>
+<div class="code">
+<div class="language">Html</div>
+<code>&lt;script type="text/html" id="template_partial" data-anchor="anchor_partial"&gt;
+    Include another template: {{>template_static}}
+&lt;/script&gt;</code>
+</div>
+
+<div class="code">
+<div class="language">Javascript</div>
+<code>new Barbe.View("template_partial").draw();</code>
+</div>
+
+<div class="result">
+    <div class="legend">Result</div>
+    <div id="anchor_partial"></div>
+</div>
+
+
+<h3>Basic template</h3>
+<div class="code">
+<div class="language">Html</div>
+<code>&lt;script type="text/html" id="template_basic" data-anchor="anchor_basic"&gt;
+    This is a basic template created with &lt;em&gt;{{ name }}&lt;/em&gt;.
+&lt;/script&gt;</code>
+</div>
+
+<div class="code">
+<div class="language">Javascript</div>
+<code>new Barbe.View("template_basic", {data: {name: "Barbe.js"}}).draw();</code>
+</div>
+
+<div class="result">
+    <div class="legend">Result</div>
+    <div id="anchor_basic"></div>
+</div>
+
+<h3>Define the anchor in Javascript</h3>
+<div class="code">
+<div class="language">Html</div>
+<code>&lt;script type="text/html" id="template_anchor"&gt;
+This is a template created with &lt;em&gt;{{ name }}&lt;/em&gt; and the anchor is defined with the constructor.
+&lt;/script&gt;</code>
+</div>
+
+<div class="code">
+<div class="language">Javascript</div>
+<code>new Barbe.View("template_anchor", {data: {name: "Barbe.js"}}, "anchor_anchor").draw();</code>
+</div>
+
+<div class="result">
+    <div class="legend">Result</div>
+    <div id="anchor_anchor"></div>
+</div>
+
+<h3>Alter the response</h3>
+<div class="code">
+<div class="language">Html</div>
+<code>&lt;script type="text/html" id="template_success" data-anchor="anchor_success&gt;
+This is a template created with {{ name }} and the data has been altered: {{ nameUpperCase }}.
+&lt;/script&gt;</code>
+</div>
+
+<div class="code">
+<div class="language">Javascript</div>
+<code>new Barbe.View("template_success", {
+    data: {name: "Barbe.js"},
+    success: function (response) {
+        response.nameUpperCase = response.name.toUpperCase();
+        return response;
+    }
+}).draw();</code>
+</div>
+
+<div class="result">
+    <div class="legend">Result</div>
+    <div id="anchor_success"></div>
+</div>
+
+
+<h3>Populate a template with an API response</h3>
+<div class="code">
+<div class="language">Html</div>
+<code>&lt;script type="text/html" id="template_api" data-anchor="anchor_api&gt;
+{{#data}}
+    {{points}}
+{{/data}}
+&lt;/script&gt;</code>
+</div>
+
+<div class="code">
+<div class="language">Javascript</div>
+<code>new Barbe.View("template_api", {
+    url: "http://punchtab.com/api/v1/reward?key=ef256e0242a3448d8986b57e559c3cc8",
+    dataType: "jsonp",
+    success: function (response) {
+        return response;
+    }
+}).draw();</code>
+</div>
+
+<div class="result">
+    <div class="legend">Result</div>
+    <div id="anchor_api"></div>
+</div>
+
+
+<h3>Populate a template with an API response</h3>
+<div class="code">
+<div class="language">Html</div>
+<code>&lt;script type="text/html" id="template_api_advanced" data-anchor="anchor_api_advanced&gt;
+{{#data}}
+    {{points}}: {{strPoints}}&lt;br&gt;
+{{/data}}
+&lt;/script&gt;</code>
+</div>
+
+<div class="code">
+<div class="language">Javascript</div>
+<code>new Barbe.View("template_api_advanced", {
+    url: "http://punchtab.com/api/v1/reward?key=ef256e0242a3448d8986b57e559c3cc8",
+    dataType: "jsonp",
+    success: function (response) {
+        for (var i = 0; i < response.data.length; i++) {
+            response.data[i].strPoints = response.data[i].points + " points";
+        }
+        return response;
+    }
+}).draw();</code>
+</div>
+
+<div class="result">
+    <div class="legend">Result</div>
+    <div id="anchor_api_advanced"></div>
+</div>
+
+
+<!-- TEMPLATES -->
+<script type="text/html" id="template_static" data-anchor="anchor_static">
+This is a static template
+</script>
+
+<script type="text/html" id="template_basic" data-anchor="anchor_basic">
+This is a basic template created with <em>{{ name }}</em>.
+</script>
+
+<script type="text/html" id="template_anchor">
+This is a template created with <em>{{ name }}</em> and the anchor is defined with the constructor.
+</script>
+
+<script type="text/html" id="template_success", data-anchor="anchor_success">
+This is a template created with {{ name }} and the data has been altered: {{ nameUpperCase }}.
+</script>
+
+<script type="text/html" id="template_api" data-anchor="anchor_api">
+{{#data}}
+    {{points}}
+{{/data}}
+</script>
+
+<script type="text/html" id="template_partial" data-anchor="anchor_partial">
+Include another template: {{>template_static}}
+</script>
+
+<script type="text/html" id="template_api_advanced" data-anchor="anchor_api_advanced">
+{{#data}}
+    {{points}}: {{strPoints}}<br>
+{{/data}}
+</script>
+<!-- TEMPLATES -->
+
+<script type="text/javascript" src="./js/jquery-1.7.1.min.js"></script>
+<script type="text/javascript" src="./js/mustache.js"></script>
+<script type="text/javascript" src="./js/handlebars-1.0.0.beta.6.js"></script>
+<script type="text/javascript" src="./js/hogan.js"></script>
+<script type="text/javascript" src="./js/barbe.js"></script>
+
+<script>
+//Barbe.settings.template.compile = function (template, context, partials) { return Hogan.compile(template).render(context, partials); };
+/*
+Barbe.settings.template.compile = function (template, context, partials, name) {
+    var t = Handlebars.compile(template);
+    Handlebars.registerPartial(name, template);
+    return t(context);
+};
+*/
+
+new Barbe.View("template_static").draw();
+
+new Barbe.View("template_partial").draw();
+
+new Barbe.View("template_basic", {data: {name: "Barbe.js"}}).draw();
+
+new Barbe.View("template_anchor", {data: {name: "Barbe.js"}}, "anchor_anchor").draw();
+
+new Barbe.View("template_success", {
+    data: {name: "Barbe.js"},
+    success: function (response) {
+        response.nameUpperCase = response.name.toUpperCase();
+        return response;
+    }
+}, "anchor_success").draw();
+
+new Barbe.View("template_success", {
+    data: {name: "Barbe.js"},
+    success: function (response) {
+        response.nameUpperCase = response.name.toUpperCase();
+        return response;
+    }
+}).draw();
+
+new Barbe.View("template_api", {
+    url: "http://punchtab.com/api/v1/reward?key=ef256e0242a3448d8986b57e559c3cc8",
+    dataType: "jsonp",
+    success: function (response) {
+        return response;
+    }
+}).draw();
+
+new Barbe.View("template_api_advanced", {
+    url: "http://punchtab.com/api/v1/reward?key=ef256e0242a3448d8986b57e559c3cc8",
+    dataType: "jsonp",
+    success: function (response) {
+        for (var i = 0; i < response.data.length; i++) {
+            response.data[i].strPoints = response.data[i].points + " points";
+        }
+        return response;
+    }
+}).draw();
+</script>
+
+</body>
+</html>

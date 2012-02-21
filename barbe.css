@@ -10,7 +10,6 @@ body {
 h1, h2, h3, h4, h5, h6 {
     margin: 0;
     font-family: "Lustria", serif;
-    text-transform:capitalize;
 }
 h1 {
     font-size: 70px;
@@ -24,15 +23,37 @@ h3 {
 }
 h5 {
     margin: 40px 0 5px 0;
+    padding-left: 30px;
 }
 p {
     line-height: 28px;
+    text-align: justify;
+}
+pre {
+    margin: 0;
+    white-space: pre-wrap;
 }
 .barbe, a, a:visited, a:active {
     color: #7B4A12;
 }
 a:hover {
     color: #BA6222;
+}
+ul {
+    list-style: none;
+}
+ul li {
+    margin-bottom: 15px;
+}
+sup {
+    margin-left: 3px;
+}
+
+
+.barbe-loader {
+    width: 32px;
+    height: 32px;
+    background: url('./images/ajax-loader.gif') no-repeat;
 }
 
 header {
@@ -43,15 +64,25 @@ header {
     font-style: italic;
 }
 
-.code {
+code {
+    font-family: Droid Sans Mono, monospace;
     line-height: 22px;
     font-size: 15px;
+    white-space: pre-wrap;
+}
+.code, .result {
     padding: 12px;
     margin: 10px 0;
     border: 1px solid #a3a3a3;
-    background-color: #ededed;
     border-radius: 4px;
+}
+.code {
+    background-color: #ededed;
+}
+.code div.language, .result div.legend {
     font-family: Droid Sans Mono, monospace;
+    float: right;
+    color: #a3a3a3;
 }
 .comment {
     color: #0d911f;
@@ -61,7 +92,17 @@ footer {
     padding: 20px 10px 0 10px;
     border-top: 1px solid #ededed;
 }
-footer ul {
+footer ul, nav ul {
     margin: 0;
-    list-style: none;
+    padding: 0;
+}
+nav {
+    border-top: 1px solid #e3e3e3;
+    padding-top: 15px;
+    text-align: center;
+}
+footer ul li, nav ul li {
+    list-style-type: none;
+    display: inline;
+    margin-right: 20px;
 }
