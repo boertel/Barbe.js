@@ -39,6 +39,7 @@
                 
             }
         },
+
         // parse the html to collect templates defined by <script type="<Barbe.settings.template.type>" id=""></script>
         grab: function () {
             scripts = document.scripts || document.getElementsByTagName('script');
@@ -52,12 +53,23 @@
     };
 
     // Barbe.View
-    Barbe.View = function (template, provider, anchor) {
+    Barbe.View = function (template, provider, args) {
         if (template === undefined || Barbe.templates[template] === undefined) {
             throw "[Barbe] template #" + template + " not found.";
         }
         this.template = Barbe.templates[template].render;
         this.anchor = Barbe.templates[template].anchor;
+        this.options = {};
+
+        var anchor;
+        
+        if (typeof args === "string") {
+            anchor = args;
+        } else if (typeof args !== "undefined") {
+            anchor = args.anchor;
+            delete args.anchor;
+            this.options = args;
+        }
 
         if (anchor !== undefined) {
             this.anchor = document.getElementById(anchor);
