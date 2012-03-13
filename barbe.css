@@ -1,6 +1,6 @@
 body {
     font-family: droid-serif, Palatino, Georgia, 'Times New Roman', Times, serif;
-    font-size: 19px;
+    font-size: 18px;
     color: #32271B;
 }
 body {
@@ -24,6 +24,7 @@ h3 {
 h5 {
     margin: 40px 0 5px 0;
     padding-left: 30px;
+    font-size: 18px;
 }
 p {
     line-height: 28px;
@@ -49,6 +50,10 @@ sup {
     margin-left: 3px;
 }
 
+.clearfix:after { content: "."; display: block; height: 0; clear: both; visibility: hidden; }
+.clearfix { display: inline-block; }
+.clearfix { display: block; }
+.none { display: none; }
 
 .barbe-loader {
     width: 32px;
@@ -87,6 +92,13 @@ code {
 .comment {
     color: #0d911f;
 }
+.my_template {
+    color: purple;
+}
+.my_anchor {
+    color: #f56600;
+}
+
 footer {
     margin: 20px 0;
     padding: 20px 10px 0 10px;

@@ -25,13 +25,13 @@
 </nav>
 
 <h2 id="usage">Usage</h2>
-<p>In this short example, we use <a href="https://mustache.github.com" target="_blank">Mustache</a> templates.</p>
+<p>Here is a short example of how to use Barbe in a simple way. <a href="https://mustache.github.com" target="_blank">Mustache</a> is the templating engine used.</p>
 
 <h3>1. Create your template</h3>
 <div class="code">
 <div class="language">Html</div>
-<code>&lt;script type="text/html" id="my_template" data-anchor="my_anchor"&gt;
-    &lt;p&gt;This is a template building with {{ name }}.&lt;/p&gt;
+<code>&lt;script type="text/html" id="<span class="my_template">my_template</span>" data-anchor="<span class="my_anchor">my_anchor</span>"&gt;
+    &lt;p&gt;This is a template building with &lt;em&gt;{{ name }}&lt;/em&gt;.&lt;/p&gt;
 &lt;/script&gt;
 </code>
 </div>
@@ -39,13 +39,13 @@
 <h3>2. Create your anchor in your html file</h3>
 <div class="code">
 <div class="language">Html</div>
-<code>&lt;div id="my_anchor"&gt;&lt/div&gt;</code>
+<code>&lt;div id="<span class="my_anchor">my_anchor</span>"&gt;&lt/div&gt;</code>
 </div>
 
 <h3>3. Initialize the template</h3>
 <div class="code">
 <div class="language">Javascript</div>
-<code>new Barbe.View("my_template", {
+<code>new Barbe.View("<span class="my_template">my_template</span>", {
     data: {name: "Barbe.js"}
 }).draw();
 </code>
@@ -56,7 +56,7 @@
 <div class="language">Html</div>
 <code>...
 &lt;div id="my_anchor"&gt;
-    &lt;p&gt;This is a template building with Barbe.js.&lt;/p&gt;
+    &lt;p&gt;This is a template building with &lt;em&gt;Barbe.js&lt;/em&gt;.&lt;/p&gt;
 &lt/div&gt;
 ...</code>
 </div>
@@ -91,10 +91,10 @@ Barbe.settings.template.type = ["text/html"];
 });
 </code>
 </div>
-<p><em>Note</em>: the second object, called <code>provider</code> is the same object that will be passed to jQuery <code>$.ajax</code> function<sup><a href="#">1</a></sup>. The <code>success</code> is overwritten to take the <code>response</code> and use it as data by the templating engine to create the HTML version of the template, so don't forget to <code>return response;</code> at the end of the function.</p>
+<p><em>Note</em>: the second object, called <code>provider</code>, is almost the same object that will be passed to jQuery <code>$.ajax</code> function<sup><a href="#">1</a></sup>. The <code>success</code> is overwritten to take the <code>response</code> and use it as data by the templating engine to create the HTML version of the template, so don't forget to <code>return response;</code> at the end of the function.</p>
 
 <h5>Execute a function on the data</h5>
-<p>Mustache does not provide a helper system, but sometimes we need to </p>
+<p>Mustache does not provide a helper system, but sometimes we need to surcharge the data such as capitalized strings, change the format of numbers.</p>
 <div class="code">
 <div class="language">Javascript</div>
 <code>var view = new Barbe.View({template: "api_template",

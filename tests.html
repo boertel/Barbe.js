@@ -14,7 +14,6 @@
 
 
 <h3>Static template</h3>
-
 <div class="code">
 <div class="language">Html</div>
 <code>&lt;script type="text/html" id="template_static" data-anchor="anchor_static"&gt;
@@ -27,10 +26,11 @@
 <code>new Barbe.View("template_static").draw();</code>
 </div>
 
-<div class="result">
+<div class="result clearfix">
     <div class="legend">Result</div>
     <div id="anchor_static"></div>
 </div>
+
 
 <h3>Basic template that included a another template</h3>
 <div class="code">
@@ -45,7 +45,7 @@
 <code>new Barbe.View("template_partial").draw();</code>
 </div>
 
-<div class="result">
+<div class="result clearfix">
     <div class="legend">Result</div>
     <div id="anchor_partial"></div>
 </div>
@@ -64,10 +64,11 @@
 <code>new Barbe.View("template_basic", {data: {name: "Barbe.js"}}).draw();</code>
 </div>
 
-<div class="result">
+<div class="result clearfix">
     <div class="legend">Result</div>
     <div id="anchor_basic"></div>
 </div>
+
 
 <h3>Define the anchor in Javascript</h3>
 <div class="code">
@@ -82,10 +83,11 @@ This is a template created with &lt;em&gt;{{ name }}&lt;/em&gt; and the anchor i
 <code>new Barbe.View("template_anchor", {data: {name: "Barbe.js"}}, "anchor_anchor").draw();</code>
 </div>
 
-<div class="result">
+<div class="result clearfix">
     <div class="legend">Result</div>
     <div id="anchor_anchor"></div>
 </div>
+
 
 <h3>Alter the response</h3>
 <div class="code">
@@ -106,7 +108,7 @@ This is a template created with {{ name }} and the data has been altered: {{ nam
 }).draw();</code>
 </div>
 
-<div class="result">
+<div class="result clearfix">
     <div class="legend">Result</div>
     <div id="anchor_success"></div>
 </div>
@@ -117,7 +119,7 @@ This is a template created with {{ name }} and the data has been altered: {{ nam
 <div class="language">Html</div>
 <code>&lt;script type="text/html" id="template_api" data-anchor="anchor_api&gt;
 {{#data}}
-    {{points}}
+    {{name}}
 {{/data}}
 &lt;/script&gt;</code>
 </div>
@@ -125,7 +127,7 @@ This is a template created with {{ name }} and the data has been altered: {{ nam
 <div class="code">
 <div class="language">Javascript</div>
 <code>new Barbe.View("template_api", {
-    url: "http://punchtab.com/api/v1/reward?key=ef256e0242a3448d8986b57e559c3cc8",
+    url: "https://api.github.com/users/boertel",
     dataType: "jsonp",
     success: function (response) {
         return response;
@@ -133,7 +135,7 @@ This is a template created with {{ name }} and the data has been altered: {{ nam
 }).draw();</code>
 </div>
 
-<div class="result">
+<div class="result clearfix">
     <div class="legend">Result</div>
     <div id="anchor_api"></div>
 </div>
@@ -144,7 +146,9 @@ This is a template created with {{ name }} and the data has been altered: {{ nam
 <div class="language">Html</div>
 <code>&lt;script type="text/html" id="template_api_advanced" data-anchor="anchor_api_advanced&gt;
 {{#data}}
-    {{points}}: {{strPoints}}&lt;br&gt;
+    Login: {{login}}&lt;br&gt;
+    Location: {{location}}&lt;br&gt;
+    Created at: {{created_at}}&lt;br&gt;
 {{/data}}
 &lt;/script&gt;</code>
 </div>
@@ -152,12 +156,10 @@ This is a template created with {{ name }} and the data has been altered: {{ nam
 <div class="code">
 <div class="language">Javascript</div>
 <code>new Barbe.View("template_api_advanced", {
-    url: "http://punchtab.com/api/v1/reward?key=ef256e0242a3448d8986b57e559c3cc8",
+    url: "https://api.github.com/users/boertel",
     dataType: "jsonp",
     success: function (response) {
-        for (var i = 0; i < response.data.length; i++) {
-            response.data[i].strPoints = response.data[i].points + " points";
-        }
+        response.data.created_at = new Date(response.data.created_at);
         return response;
     }
 }).draw();</code>
@@ -165,7 +167,19 @@ This is a template created with {{ name }} and the data has been altered: {{ nam
 
 <div class="result">
     <div class="legend">Result</div>
-    <div id="anchor_api_advanced"></div>
+    <div id="anchor_api_advanced">Before Barbe runs.</div>
+</div>
+
+
+<h3>Append to the anchor</h3>
+<div class="code">
+    <div class="language">Html</div>
+    <code></code>
+</div>
+
+<div class="result">
+    <div class="legend">Result</div>
+    <div id="anchor_api_append"></div>
 </div>
 
 
@@ -188,7 +202,7 @@ This is a template created with {{ name }} and the data has been altered: {{ nam
 
 <script type="text/html" id="template_api" data-anchor="anchor_api">
 {{#data}}
-    {{points}}
+    {{name}}
 {{/data}}
 </script>
 
@@ -198,7 +212,15 @@ Include another template: {{>template_static}}
 
 <script type="text/html" id="template_api_advanced" data-anchor="anchor_api_advanced">
 {{#data}}
-    {{points}}: {{strPoints}}<br>
+    Login: {{login}}<br>
+    Location: {{location}}<br>
+    Created at: {{created_at}}<br>
+{{/data}}
+</script>
+
+<script type="text/html" id="template_api_append" data-anchor="anchor_api_append">
+{{#data}}
+    {{name}}
 {{/data}}
 </script>
 <!-- TEMPLATES -->
@@ -244,7 +266,7 @@ new Barbe.View("template_success", {
 }).draw();
 
 new Barbe.View("template_api", {
-    url: "http://punchtab.com/api/v1/reward?key=ef256e0242a3448d8986b57e559c3cc8",
+    url: "https://api.github.com/users/boertel",
     dataType: "jsonp",
     success: function (response) {
         return response;
@@ -252,14 +274,23 @@ new Barbe.View("template_api", {
 }).draw();
 
 new Barbe.View("template_api_advanced", {
-    url: "http://punchtab.com/api/v1/reward?key=ef256e0242a3448d8986b57e559c3cc8",
+    url: "https://api.github.com/users/boertel",
     dataType: "jsonp",
     success: function (response) {
-        for (var i = 0; i < response.data.length; i++) {
-            response.data[i].strPoints = response.data[i].points + " points";
-        }
+        response.data.created_at = new Date(response.data.created_at);
         return response;
     }
+}).draw();
+
+
+new Barbe.View("template_api_append", {
+    url: "https://api.github.com/users/boertel",
+    dataType: "jsonp",
+    success: function (response) {
+        return response;
+    }
+}, false, {
+    append: true
 }).draw();
 </script>
 
