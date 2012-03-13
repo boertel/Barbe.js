@@ -13,6 +13,7 @@
             ajax: $.ajax
         },
 
+        // save template in a dictionary and add the render function to create the final result.
         add: function (name, str_template, anchor) {
             if (Barbe.html.hasOwnProperty(name)) {
                 throw "[Barbe] You've already got a template by the name: \"" + name + "\"";
@@ -38,6 +39,7 @@
                 
             }
         },
+        // parse the html to collect templates defined by <script type="<Barbe.settings.template.type>" id=""></script>
         grab: function () {
             scripts = document.scripts || document.getElementsByTagName('script');
             for(var i = 0, len = scripts.length; i < len; i++) {
@@ -68,6 +70,8 @@
 
         this.provider = provider || {};
     };
+
+    // linked the template with the data
     Barbe.View.prototype.render = function (response) {
         // Mustache doesn't like array as data, so we have to create 
         // a dumb object named "array" that contained the array
@@ -80,11 +84,15 @@
         this.view = this.template(response);
         return this.view;
     };
+
+    // Attach the populated template to the anchor
     Barbe.View.prototype.castAnchor = function (response, callback) {
         this.loader && this.loader.remove();
         var rendered = this.render(response);
         callback && callback.call(this, rendered);
     };
+
+    // process to the ajax call
     Barbe.View.prototype.ajax = function (callback) {
         var that = this;
         var provider = this.provider.success;
@@ -98,7 +106,9 @@
         that.ajaxParams.success = monkeySuccess;
         Barbe.settings.ajax(that.ajaxParams);
     };
-    Barbe.View.prototype.draw = function (callback) {
+
+    // decide if the template is populated with an API call or directly with pure dictionary
+    Barbe.View.prototype.grow = function (callback) {
         if (this.provider.url !== undefined) {
             this.loader = new Barbe.Loader(this.anchor);
             this.ajax.call(this, callback);

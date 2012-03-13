@@ -23,7 +23,7 @@
 
 <div class="code">
 <div class="language">Javascript</div>
-<code>new Barbe.View("template_static").draw();</code>
+<code>new Barbe.View("template_static").grow();</code>
 </div>
 
 <div class="result clearfix">
@@ -42,7 +42,7 @@
 
 <div class="code">
 <div class="language">Javascript</div>
-<code>new Barbe.View("template_partial").draw();</code>
+<code>new Barbe.View("template_partial").grow();</code>
 </div>
 
 <div class="result clearfix">
@@ -61,7 +61,7 @@
 
 <div class="code">
 <div class="language">Javascript</div>
-<code>new Barbe.View("template_basic", {data: {name: "Barbe.js"}}).draw();</code>
+<code>new Barbe.View("template_basic", {data: {name: "Barbe.js"}}).grow();</code>
 </div>
 
 <div class="result clearfix">
@@ -80,7 +80,7 @@ This is a template created with &lt;em&gt;{{ name }}&lt;/em&gt; and the anchor i
 
 <div class="code">
 <div class="language">Javascript</div>
-<code>new Barbe.View("template_anchor", {data: {name: "Barbe.js"}}, "anchor_anchor").draw();</code>
+<code>new Barbe.View("template_anchor", {data: {name: "Barbe.js"}}, "anchor_anchor").grow();</code>
 </div>
 
 <div class="result clearfix">
@@ -105,7 +105,7 @@ This is a template created with {{ name }} and the data has been altered: {{ nam
         response.nameUpperCase = response.name.toUpperCase();
         return response;
     }
-}).draw();</code>
+}).grow();</code>
 </div>
 
 <div class="result clearfix">
@@ -128,11 +128,8 @@ This is a template created with {{ name }} and the data has been altered: {{ nam
 <div class="language">Javascript</div>
 <code>new Barbe.View("template_api", {
     url: "https://api.github.com/users/boertel",
-    dataType: "jsonp",
-    success: function (response) {
-        return response;
-    }
-}).draw();</code>
+    dataType: "jsonp"
+}).grow();</code>
 </div>
 
 <div class="result clearfix">
@@ -162,7 +159,7 @@ This is a template created with {{ name }} and the data has been altered: {{ nam
         response.data.created_at = new Date(response.data.created_at);
         return response;
     }
-}).draw();</code>
+}).grow();</code>
 </div>
 
 <div class="result">
@@ -230,21 +227,13 @@ Barbe.settings.template.compile = function (template, context, partials, name) {
 };
 */
 
-new Barbe.View("template_static").draw();
+new Barbe.View("template_static").grow();
 
-new Barbe.View("template_partial").draw();
+new Barbe.View("template_partial").grow();
 
-new Barbe.View("template_basic", {data: {name: "Barbe.js"}}).draw();
+new Barbe.View("template_basic", {data: {name: "Barbe.js"}}).grow();
 
-new Barbe.View("template_anchor", {data: {name: "Barbe.js"}}, "anchor_anchor").draw();
-
-new Barbe.View("template_success", {
-    data: {name: "Barbe.js"},
-    success: function (response) {
-        response.nameUpperCase = response.name.toUpperCase();
-        return response;
-    }
-}, "anchor_success").draw();
+new Barbe.View("template_anchor", {data: {name: "Barbe.js"}}, "anchor_anchor").grow();
 
 new Barbe.View("template_success", {
     data: {name: "Barbe.js"},
@@ -252,12 +241,20 @@ new Barbe.View("template_success", {
         response.nameUpperCase = response.name.toUpperCase();
         return response;
     }
-}).draw();
+}, "anchor_success").grow();
+
+new Barbe.View("template_success", {
+    data: {name: "Barbe.js"},
+    success: function (response) {
+        response.nameUpperCase = response.name.toUpperCase();
+        return response;
+    }
+}).grow();
 
 new Barbe.View("template_api", {
     url: "https://api.github.com/users/boertel",
     dataType: "jsonp"
-}).draw();
+}).grow();
 
 new Barbe.View("template_api_advanced", {
     url: "https://api.github.com/users/boertel",
@@ -266,7 +263,7 @@ new Barbe.View("template_api_advanced", {
         response.data.created_at = new Date(response.data.created_at);
         return response;
     }
-}).draw();
+}).grow();
 </script>
 
 </body>
