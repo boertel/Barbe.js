@@ -171,17 +171,6 @@ This is a template created with {{ name }} and the data has been altered: {{ nam
 </div>
 
 
-<h3>Append to the anchor</h3>
-<div class="code">
-    <div class="language">Html</div>
-    <code></code>
-</div>
-
-<div class="result">
-    <div class="legend">Result</div>
-    <div id="anchor_api_append"></div>
-</div>
-
 
 <!-- TEMPLATES -->
 <script type="text/html" id="template_static" data-anchor="anchor_static">
@@ -267,10 +256,7 @@ new Barbe.View("template_success", {
 
 new Barbe.View("template_api", {
     url: "https://api.github.com/users/boertel",
-    dataType: "jsonp",
-    success: function (response) {
-        return response;
-    }
+    dataType: "jsonp"
 }).draw();
 
 new Barbe.View("template_api_advanced", {
@@ -280,17 +266,6 @@ new Barbe.View("template_api_advanced", {
         response.data.created_at = new Date(response.data.created_at);
         return response;
     }
-}).draw();
-
-
-new Barbe.View("template_api_append", {
-    url: "https://api.github.com/users/boertel",
-    dataType: "jsonp",
-    success: function (response) {
-        return response;
-    }
-}, false, {
-    append: true
 }).draw();
 </script>
 

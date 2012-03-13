@@ -72,7 +72,9 @@
         // Mustache doesn't like array as data, so we have to create 
         // a dumb object named "array" that contained the array
         if (Array.isArray(response)) {
-            response = {array: response};
+            response = {
+                array: response
+            };
         }
 
         this.view = this.template(response);
@@ -87,7 +89,9 @@
         var that = this;
         var provider = this.provider.success;
         var monkeySuccess = function (response) {
-            response = provider && provider.call(that, response);
+            if (provider !== undefined) {
+                response = provider.call(that, response);
+            }
             that.castAnchor.call(that, response, callback);
         };
         that.ajaxParams = this.provider;
