@@ -97,7 +97,7 @@ Barbe.settings.template.type = ["text/html"];
 <p>Mustache does not provide a helper system, but sometimes we need to surcharge the data such as capitalized strings, change the format of numbers.</p>
 <div class="code">
 <div class="language">Javascript</div>
-<code>var view = new Barbe.View({template: "api_template",
+<code>var view = new Barbe.View("api_template", {
     data: [{name: "John"}, {name: "Ben"}],
     provider: function (response) {
         for (var i = 0; i < response.length; i++) {
