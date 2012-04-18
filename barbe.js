@@ -7,9 +7,19 @@
         templates: {},
         settings: {
             template: {
-                engine: Mustache.render,
+                render: Mustache.render,
+                compile: undefined,
                 type: ['text/html']
             },
+            /*
+             template: {
+                 render: function (self, context, partials) {
+                     self.render(context, partials);
+                 }
+                 compile: hogan.compile(str),
+                 type: ['text/html']
+             }
+             */
             ajax: $.ajax,
             loader: {
                 className: "barbe-loader",
@@ -23,7 +33,11 @@
                 throw "[Barbe] You've already got a template by the name: \"" + name + "\"";
             }
             else {
-                Barbe.html[name] = str_template;
+                if (Barbe.settings.template.compile !== undefined) {
+                    Barbe.html[name] = Barbe.settings.template.compile(str_template);
+                } else {
+                    Barbe.html[name] = str_template;
+                }
                 Barbe.templates[name] = {};
 
                 if (typeof anchor !== "undefined") {
@@ -34,7 +48,7 @@
                 }
                 Barbe.templates[name].render = function (data) {
                     data = data || {};
-                    var html = Barbe.settings.template.engine(Barbe.html[name], data, Barbe.html);
+                    var html = Barbe.settings.template.render(Barbe.html[name], data, Barbe.html);
                     if (Barbe.templates[name].anchor !== undefined) {
                         Barbe.templates[name].anchor.innerHTML = html;
                     }
