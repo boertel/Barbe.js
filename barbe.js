@@ -105,7 +105,7 @@
     Barbe.View.prototype.render = function (response) {
         // Mustache doesn't like array as data, so we have to create 
         // a dumb object named "array" that contained the array
-        if (Array.isArray(response)) {
+        if (Object.prototype.toString.call(response) === '[object Array]') {
             response = {
                 array: response
             };
@@ -172,9 +172,3 @@
     window.Barbe = Barbe;
     Barbe.grab();
 })();
-
-if(!Array.isArray) {
-    Array.isArray = function (arg) {
-        return Object.prototype.toString.call(arg) === '[object Array]';
-    };
-}
