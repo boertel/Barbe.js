@@ -113,12 +113,14 @@ Barbe.settings.ajax = myProxyFunction;
 
 
 <h5>Use another templating engine</h5>
-<p>By default, Barbe is using <a href="https://github.com/janl/mustache.js" target="_blank">Mustache</a> but you can use your favorite templating engine such as <a href="http://twitter.github.com/hogan.js/" target="_blank">Hogan</a> or <a href="http://handlebarsjs.com/" target="_blank">Handlerbar</a>. You can find how to define the <code>compile</code> function for those two, below in the <a href="#">documentation</a>.
+<p>By default, Barbe is using <a href="https://github.com/janl/mustache.js" target="_blank">Mustache</a> but you can use your favorite templating engine such as <a href="http://twitter.github.com/hogan.js/" target="_blank">Hogan</a> or <a href="http://handlebarsjs.com/" target="_blank">Handlerbar</a>. These two templating engine provide a way to compile your template before rendering them, in that case, you need to define the template settings as following:</p>
 <div class="code" data-language="javascript">
 <code><span class="comment">// Function that compiles the template</span>
 Barbe.settings.template.compile = hogan.compile;
 <span class="comment">// Function that render the template with data.</span>
-Barbe.settings.template.render = function (s, context, partials) { s.render(context, partials); };
+Barbe.settings.template.render = function (template, data, partials) {
+    template.render(data, partials);
+};
 <span class="comment">// Type to identify templates.</span>
 Barbe.settings.template.type = ["text/html"];</code>
 </div>
@@ -129,9 +131,7 @@ Barbe.settings.template.type = ["text/html"];</code>
 <div class="code" data-language="javascript">
 <code><span class="comment">// Disable the loader</span>
 Barbe.settings.loader = false;
-<span class="comment">// Enable the loader</span>
-Barbe.settings.loader = true;
-<span class="comment">// Define your own class name and id</span>
+<span class="comment">// Define your own class name and id and enable the loader</span>
 Barbe.settings.loader = {className: "barbe-loader", id: "barbe_loader"};</code>
 </div>
 
