@@ -28,8 +28,7 @@
 <p>Here is a short example of how to use Barbe in a simple way. <a href="https://mustache.github.com" target="_blank">Mustache</a> is the templating engine used.</p>
 
 <h3>1. Create your template</h3>
-<div class="code">
-<div class="language">Html</div>
+<div class="code" data-language="javascript">
 <code>&lt;script type="text/html" id="<span class="my_template">my_template</span>" data-anchor="<span class="my_anchor">my_anchor</span>"&gt;
     &lt;p&gt;This is a template building with &lt;em&gt;{{ name }}&lt;/em&gt;.&lt;/p&gt;
 &lt;/script&gt;
@@ -37,51 +36,35 @@
 </div>
 
 <h3>2. Create your anchor in your html file</h3>
-<div class="code">
-<div class="language">Html</div>
+<div class="code" data-language="html">
 <code>&lt;div id="<span class="my_anchor">my_anchor</span>"&gt;&lt/div&gt;</code>
 </div>
 
 <h3>3. Initialize the template</h3>
-<div class="code">
-<div class="language">Javascript</div>
+<div class="code" data-language="javascript">
 <code>new Barbe.View("<span class="my_template">my_template</span>", {
-    data: {name: "Barbe.js"}
+    data: {name: "<span class="barbe">Barbe.js</span>"}
 }).grow();
 </code>
 </div>
 
 <h3>4. Result</h3>
-<div class="code">
-<div class="language">Html</div>
+<div class="code" data-language="html">
 <code>...
-&lt;div id="my_anchor"&gt;
-    &lt;p&gt;This is a template building with &lt;em&gt;Barbe.js&lt;/em&gt;.&lt;/p&gt;
+&lt;div id="<span class="my_anchor">my_anchor</span>"&gt;
+    &lt;p&gt;This is a template building with &lt;em&gt;<span class="barbe">Barbe.js</span>&lt;/em&gt;.&lt;/p&gt;
 &lt/div&gt;
 ...</code>
 </div>
 
-<p>To see a full example, check out the github repository: <a href="http://github.com/boertel/barbe.js" target="_blank">boertel/barbe.js</a></p>
+<p>Check out this page, to have more <a href="//boertel.github.com/Barbe.js/tests.html">examples</a>.</p>
 
 
 <h2 id="options">More Options</h2>
 
-<h5>Use another templating engine</h5>
-<p>By default, Barbe is using <a href="https://mustache.github.com" target="_blank">Mustache</a> but you can use your favorite templating engine such as <a href="http://twitter.github.com/hogan.js/" target="_blank">Hogan</a> or <a href="http://handlebarsjs.com/" target="_blank">Handlersbar</a>. You can find how to define the <code>compile</code> function for those two, below in the <a href="#">documentation</a>.
-<div class="code">
-<div class="language">Javascript</div>
-<code><span class="comment">// Function that compiles the template with data.</span>
-Barbe.settings.template.engine = Mustache.render;
-<span class="comment">// Type to identify templates.</span>
-Barbe.settings.template.type = ["text/html"];
-</code>
-</div>
-
-
 <h5>Populate a template with an API response</h5>
-<p>Most of the populated templates use an API response, that's why Barbe provides a easy way to populate the templates. And in bonus, a loader<sup><a href="#loader">2</a></sup> is automatically inserted inside the anchor during the API call.</p>
-<div class="code">
-<div class="language">Javascript</div>
+<p>Most of the populated templates use an API response, that's why Barbe provides a easy way to populate the templates. And in bonus, a loader<sup><a href="#loader"></a></sup> is automatically inserted inside the anchor during the API call.</p>
+<div class="code" data-language="javascript">
 <code>var view = new Barbe.View("api_template", {
     url: "/api/v1/user",
     success: function (response) {
@@ -91,15 +74,15 @@ Barbe.settings.template.type = ["text/html"];
 });
 </code>
 </div>
-<p><em>Note</em>: the second object, called <code>provider</code>, is almost the same object that will be passed to jQuery <code>$.ajax</code> function<sup><a href="#">1</a></sup>. The <code>success</code> is overwritten to take the <code>response</code> and use it as data by the templating engine to create the HTML version of the template, so don't forget to <code>return response;</code> at the end of the function.</p>
+<p><em>Note</em>: the second parameter, called <code>provider</code>, is almost the same object that will be passed to the jQuery <code>$.ajax</code> function<sup><a href="#ajax"></a></sup>. The <code>success</code> is overwritten to take the <code>response</code> and use it as data by the templating engine to create the HTML version of the template, so don't forget to <code>return response;</code> at the end of the function.</p>
 
-<h5>Execute a function on the data</h5>
+
+<h5>Execute a function on the response</h5>
 <p>Mustache does not provide a helper system, but sometimes we need to surcharge the data such as capitalized strings, change the format of numbers.</p>
-<div class="code">
-<div class="language">Javascript</div>
+<div class="code" data-language="javascript">
 <code>var view = new Barbe.View("api_template", {
     data: [{name: "John"}, {name: "Ben"}],
-    provider: function (response) {
+    success: function (response) {
         for (var i = 0; i < response.length; i++) {
             response[i].nameUpperCase = response[i].name.toUpperCase();
         }
@@ -108,12 +91,47 @@ Barbe.settings.template.type = ["text/html"];
 });</code>
 </div>
 
+<h5 id="ajax">Use your favorite/own ajax function</h5>
+<p>By default, Barbe.js uses the jQuery function <code>$.ajax</code> to do ajax calls. If for some reasons, you need to use your own function, you can update Barbe settings:
+<div class="code" data-language="javascript">
+<code>Barbe.settings.ajax = $.ajax;</code>
+</div>
+<p>But careful, the second parameter of the <code>Barbe.View</code> constructor is the parameter that will be use by the ajax function. You may need to create a proxy function that take jQuery-like object and call your own function.
 
-<h2 id="documentation">Documentation</h2>
+<div class="code" data-language="javascript">
+<code>var myAjaxFunction = function (path, data, callback, method) {
+    <span class="comment">/* do some magic here */</span>
+};
 
-<div class="code">
-<div class="language">Javascript</div>
-<code></code>
+var myProxyFunction = function (args) {
+    myAjaxFunction(args.url, args.data, args.success, args.method);
+};
+
+Barbe.settings.ajax = myProxyFunction;
+</code>
+</div>
+
+
+<h5>Use another templating engine</h5>
+<p>By default, Barbe is using <a href="https://github.com/janl/mustache.js" target="_blank">Mustache</a> but you can use your favorite templating engine such as <a href="http://twitter.github.com/hogan.js/" target="_blank">Hogan</a> or <a href="http://handlebarsjs.com/" target="_blank">Handlerbar</a>. You can find how to define the <code>compile</code> function for those two, below in the <a href="#">documentation</a>.
+<div class="code" data-language="javascript">
+<code><span class="comment">// Function that compiles the template with data.</span>
+Barbe.settings.template.engine = Mustache.render;
+<span class="comment">// Type to identify templates.</span>
+Barbe.settings.template.type = ["text/html"];
+</code>
+</div>
+
+
+<h5>Integrated loader</h5>
+<p>During ajax calls (that can take a while for slow APIs), it's better to notify users that something is happening, they just need to hang out here and wait. Barbe takes care of putting a loader (basically this piece of code: <code>&lt;div class="barbe-loader" id="barbe_loader"&gt;&lt;/div&gt;</code>) in the anchor and replace it by the template at the end of the call. Here are the differents settings you can define for the loader</p>
+<div class="code" data-language="javascript">
+<code><span class="comment">// Disable the loader</span>
+Barbe.settings.loader = false;
+<span class="comment">// Enable the loader</span>
+Barbe.settings.loader = true;
+<span class="comment">// Define your own class name and id</span>
+Barbe.settings.loader = {className: "barbe-loader", id: "barbe_loader"};</code>
 </div>
 
 
@@ -130,6 +148,21 @@ Barbe.settings.template.type = ["text/html"];
 <script type="text/javascript" src="./js/jquery-1.7.1.min.js"></script>
 <script type="text/javascript" src="./js/mustache.js"></script>
 <script type="text/javascript" src="./js/barbe.js"></script>
+
+<script>
+$(document).ready(function () {
+    $("sup > a").each(function (i) {
+        $(this).html(i+1);
+    });
+
+    $("div.code").each(function () {
+        var language = $(this).attr("data-language");
+        if (language && language.length !== 0) {
+            $(this).prepend("<div class=\"language\">" + language + "</div>");
+        }
+    });
+});
+</script>
 
 </body>
 </html>
