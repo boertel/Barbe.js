@@ -10,7 +10,11 @@
                 engine: Mustache.render,
                 type: ['text/html']
             },
-            ajax: $.ajax
+            ajax: $.ajax,
+            loader: {
+                className: "barbe-loader",
+                id: "barbe_loader"
+            }
         },
 
         // save template in a dictionary and add the render function to create the final result.
@@ -122,7 +126,9 @@
     // decide if the template is populated with an API call or directly with pure dictionary
     Barbe.View.prototype.grow = function (callback) {
         if (this.provider.url !== undefined) {
-            this.loader = new Barbe.Loader(this.anchor);
+            if (Barbe.settings.loader !== false) {
+                this.loader = new Barbe.Loader(this.anchor);
+            }
             this.ajax.call(this, callback);
         } else {
             var response = this.provider.data;
@@ -137,8 +143,9 @@
     Barbe.Loader = function (anchor) {
         this.anchor = anchor;
         this.div = document.createElement("div");
-        this.div.className = "barbe-loader";
-        this.div.id = "barbe_loader";
+        this.div.className = Barbe.settings.className;
+        this.div.id = Barbe.settings.id;
+        // Clean up the anchor
         while (this.anchor.hasChildNodes()) {
             this.anchor.removeChild(this.anchor.lastChild);
         }
