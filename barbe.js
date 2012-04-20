@@ -58,7 +58,7 @@
             }
         },
 
-        // parse the html to collect templates defined by <script type="<Barbe.settings.template.type>" id=""></script>
+        // parse the html to collect templates defined by <script type="<Barbe.settings.template.type>" id="" [data-anchor=""]></script>
         grab: function () {
             scripts = document.scripts || document.getElementsByTagName('script');
             for(var i = 0, len = scripts.length; i < len; i++) {
