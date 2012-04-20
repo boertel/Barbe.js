@@ -13,7 +13,7 @@
     <h1><span class="barbe">Barbe</span>.js</h1>
     <p class="definition">– because a "barbe" (french for beard) contains a mustache.</p
 </header>
-<p>Barbe is a Javascript Library that allows you to attach templates to specific elements on your page. It also populates templates from API responses and show automatically a loader during the loading.</p>
+<p>Barbe is a Javascript Library that allows you to attach templates to specific elements on your page. It also populates templates from API responses and show automatically a loader during the loading. This library is for "read-only" projects and don't need to interact a lot with users throught forms.</p>
 
 <nav>
     <ul>
@@ -37,7 +37,9 @@
 
 <h3>2. Create your anchor in your html file</h3>
 <div class="code" data-language="html">
-<code>&lt;div id="<span class="my_anchor">my_anchor</span>"&gt;&lt/div&gt;</code>
+<code>...
+&lt;div id="<span class="my_anchor">my_anchor</span>"&gt;&lt/div&gt;
+...</code>
 </div>
 
 <h3>3. Initialize the template</h3>
@@ -74,7 +76,7 @@
 });
 </code>
 </div>
-<p><em>Note</em>: the second parameter, called <code>provider</code>, is almost the same object that will be passed to the jQuery <code>$.ajax</code> function<sup><a href="#ajax"></a></sup>. The <code>success</code> is overwritten to take the <code>response</code> and use it as data by the templating engine to create the HTML version of the template, so don't forget to <code>return response;</code> at the end of the function.</p>
+<p><em>Note</em>: the second parameter, called <code>provider</code>, is almost the same object that will be passed to the jQuery <code>$.ajax</code> function<sup><a href="#ajax"></a></sup>. The <code>success</code> is overwritten to take the <code>response</code> and use it as data by the templating engine to create the HTML version of the template, so don't forget to <code>return response;</code> at the end of the function, otherwise the template will not get the data.</p>
 
 
 <h5>Execute a function on the response</h5>
@@ -113,7 +115,7 @@ Barbe.settings.ajax = myProxyFunction;
 
 
 <h5>Use another templating engine</h5>
-<p>By default, Barbe is using <a href="https://github.com/janl/mustache.js" target="_blank">Mustache</a> but you can use your favorite templating engine such as <a href="http://twitter.github.com/hogan.js/" target="_blank">Hogan</a> or <a href="http://handlebarsjs.com/" target="_blank">Handlerbar</a>. These two templating engine provide a way to compile your template before rendering them, in that case, you need to define the template settings as following:</p>
+<p>By default, Barbe is using <a href="https://github.com/janl/mustache.js" target="_blank">Mustache</a> but you can use your favorite templating engine such as <a href="http://twitter.github.com/hogan.js/" target="_blank">Hogan</a> or <a href="http://handlebarsjs.com/" target="_blank">Handlerbars</a>. These two templating engine provide a way to compile your template before rendering them, in that case, you need to define the template settings as following:</p>
 <div class="code" data-language="javascript">
 <code><span class="comment">// Function that compiles the template</span>
 Barbe.settings.template.compile = hogan.compile;
