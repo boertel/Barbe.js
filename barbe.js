@@ -9,20 +9,22 @@
         html: {},
         templates: {},
         settings: {
+            /*
             template: {
                 render: Mustache.render,
                 compile: undefined,
                 type: ['text/html']
             },
-            /*
-             template: {
-                 render: function (self, context, partials) {
-                     self.render(context, partials);
-                 }
-                 compile: hogan.compile(str),
-                 type: ['text/html']
-             }
-             */
+            */
+            template: {
+                render: function (self, context, partials) {
+                    return self.render(context, partials);
+                },
+                compile: function (str) {
+                    return Hogan.compile(str);
+                },
+                type: ['text/html']
+            },
             ajax: $.ajax,
             loader: {
                 className: "barbe-loader",
@@ -62,7 +64,6 @@
                     }
                     return html;
                 };
-                
             }
         },
 
