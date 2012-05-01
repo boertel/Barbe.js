@@ -125,6 +125,13 @@
     Barbe.View.prototype.render = function (response) {
         // Mustache doesn't like array as data, so we have to create 
         // a dumb object named "array" that contained the array
+        if (typeof response === "undefined") {
+            response = this.provider.data;
+        }
+        if (this.provider.url === undefined && this.provider.success !== undefined) {
+            response = this.provider.success(response);
+        }
+
         if (Object.prototype.toString.call(response) === '[object Array]') {
             response = {
                 array: response
@@ -155,10 +162,10 @@
     Barbe.View.prototype.ajax = function (callback) {
         var that = this;
 
-        var success = this.provider.success;
+        var provider = this.provider.success;
         var monkeySuccess = function (response) {
-            if (success !== undefined) {
-                response = success.call(that, response);
+            if (provider !== undefined) {
+                response = provider.call(that, response);
             }
             that.castAnchor.call(that, response, callback);
         };
@@ -179,11 +186,7 @@
             }
             this.ajax.call(this, callback);
         } else {
-            var response = this.provider.data;
-            if (this.provider.success !== undefined) {
-                response = this.provider.success && this.provider.success(this.provider.data);
-            }
-            this.castAnchor(response, callback);
+            this.castAnchor(this.provider.data, callback);
         }
     };
 
@@ -195,8 +198,8 @@
     Barbe.Loader = function (anchor) {
         this.anchor = anchor;
         this.div = document.createElement("div");
-        this.div.className = Barbe.settings.className;
-        this.div.id = Barbe.settings.id;
+        this.div.className = Barbe.settings.loader.className;
+        this.div.id = Barbe.settings.loader.id;
         // Clean up the anchor
         while (this.anchor.hasChildNodes()) {
             this.anchor.removeChild(this.anchor.lastChild);
@@ -212,5 +215,9 @@
     };
 
     window.Barbe = Barbe;
-    Barbe.grab();
+
+    document.addEventListener('DOMContentLoaded', function () {
+        Barbe.grab();
+    }, true);
+    
 })();
