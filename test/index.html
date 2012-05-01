@@ -1,0 +1,46 @@
+<html>
+<head>
+    <link href="./css/qunit.css" rel="stylesheet" type="text/css" media="screen" />
+
+    <script src="./js/jquery-1.7.2.js"></script>
+    <script src="./js/qunit.js"></script>
+</head>
+
+<body>
+    <h1 id="qunit-header">QUnit example</h1>
+    <h2 id="qunit-banner"></h2>
+    <div id="qunit-testrunner-toolbar"></div>
+    <h2 id="qunit-userAgent"></h2>
+    <ol id="qunit-tests"></ol>
+    <div id="qunit-fixture">test markup, will be hidden</div>
+
+<!-- for DOM manipulation -->
+<div style="display: none;">
+    <div id="anchor-javascript-anchor"></div>
+    <div id="anchor-api"></div>
+</div>
+<!-- for DOM manipulation -->
+
+<!-- Templates -->
+<script id="template-static" type="text/html" data-anchor="anchor-template-static">This is a static template.</script>
+
+<script id="template-partial" type="text/html" data-anchor="anchor-template-partial">Include another template: {{>template-static}}</script>
+
+<script id="template-basic" type="text/html" data-anchor="anchor-template-basic">This is a basic template created with {{name}}</script>
+
+<script id="template-alteration" type="text/html" data-anchor="anchor-template-alteration">This is a template created with Barbe.js and the data has been altered: {{nameUpperCase}}.</script>
+
+<script  id="template-api" type="text/html" data-anchor="anchor-api">{{#data}}{{name}}{{/data}}</script>
+
+
+<script id="template-anchor" type="text/html" data-anchor="anchor-template-anchor">This is a template created with {{name}} and the anchor is defined with the constructor.</script>
+<!-- Templates -->
+
+<script src="./js/mustache.js"></script>
+<script src="../barbe.js"></script>
+
+<script src="./js/tests.js"></script>
+
+</body>
+
+</html>
