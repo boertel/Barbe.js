@@ -1,4 +1,7 @@
 /* 
+ * @author: Benjamin Oertel (https://github.com/boertel)
+ * @date: 01/01/2012
+ * 
 */
 (function () {
     "Barbe:nomunge";
@@ -27,7 +30,12 @@
             }
         },
 
-        // save template in a dictionary and add the render function to create the final result.
+        /**
+         * Initalize template in a dictionary: add the render function to create the final result.
+         * @param name         {string} name of the template
+         * @param str_template {string} template itself
+         * @param [anchor]     {string} id of the anchor
+         */
         add: function (name, str_template, anchor) {
             if (Barbe.html.hasOwnProperty(name)) {
                 throw "[Barbe] You've already got a template by the name: \"" + name + "\"";
@@ -58,7 +66,9 @@
             }
         },
 
-        // parse the html to collect templates defined by <script type="<Barbe.settings.template.type>" id="" [data-anchor=""]></script>
+        /**
+         * Parse the html to collect templates defined by <script type="<Barbe.settings.template.type>" id="" [data-anchor=""]></script>
+         */
         grab: function () {
             scripts = document.scripts || document.getElementsByTagName('script');
             for(var i = 0, len = scripts.length; i < len; i++) {
@@ -70,7 +80,14 @@
         }
     };
 
-    // Barbe.View
+    /**
+     * Constructor
+     * @param template       {string} template name
+     * @param provider.data  {object} data that populates the template
+     * @param provider.url   {string} url of the api
+     * @param provider.*     {*}      parameters for the ajax function
+     * @param [args.anchor]  {string} id of the anchor (overwrite the one defined on the template script tag)
+     */
     Barbe.View = function (template, provider, args) {
         if (template === undefined || Barbe.templates[template] === undefined) {
             throw "[Barbe] template #" + template + " not found.";
@@ -101,7 +118,10 @@
         this.provider = provider || {};
     };
 
-    // linked the template with the data
+    /**
+     * Populate the template with the data. Create a dumb object {array: data} if data is an array
+     * @param response {object} data that populates the template
+     */
     Barbe.View.prototype.render = function (response) {
         // Mustache doesn't like array as data, so we have to create 
         // a dumb object named "array" that contained the array
@@ -115,29 +135,43 @@
         return this.view;
     };
 
-    // Attach the populated template to the anchor
+    /**
+     *  Render the template with the response and attach it to the anchor
+     *  @params response {object}       api response or data for the template
+     *  @params callback {castAnchor}   function called after
+     */
     Barbe.View.prototype.castAnchor = function (response, callback) {
+        // TODO move this to the render function
         this.loader && this.loader.remove();
         var rendered = this.render(response);
         callback && callback.call(this, rendered);
     };
 
-    // process to the ajax call
+
+    /**
+     * Process the ajax call 
+     * @param callback {function} function executed when the ajax call successed and the template has been populated
+     */
     Barbe.View.prototype.ajax = function (callback) {
         var that = this;
-        var provider = this.provider.success;
+
+        var success = this.provider.success;
         var monkeySuccess = function (response) {
-            if (provider !== undefined) {
-                response = provider.call(that, response);
+            if (success !== undefined) {
+                response = success.call(that, response);
             }
             that.castAnchor.call(that, response, callback);
         };
+
         that.ajaxParams = this.provider;
         that.ajaxParams.success = monkeySuccess;
         Barbe.settings.ajax(that.ajaxParams);
     };
 
-    // decide if the template is populated with an API call or directly with pure dictionary
+    /**
+     * Run Barbe to populate the template and attach it the anchor
+     * @param callback {function} function executed when the ajax call successed and the template has been populated
+     */
     Barbe.View.prototype.grow = function (callback) {
         if (this.provider.url !== undefined) {
             if (Barbe.settings.loader !== false) {
@@ -153,7 +187,11 @@
         }
     };
 
-    // Barbe.Loader
+
+    /**
+     * Constructor: 
+     * @param anchor {Node} Element where the loader is added
+     */
     Barbe.Loader = function (anchor) {
         this.anchor = anchor;
         this.div = document.createElement("div");
@@ -165,6 +203,10 @@
         }
         this.anchor.appendChild(this.div);
     };
+
+    /**
+     * Remove the loader from the anchor
+     */
     Barbe.Loader.prototype.remove = function () {
         this.anchor.removeChild(this.div);
     };
