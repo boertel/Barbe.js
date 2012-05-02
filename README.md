@@ -2,7 +2,7 @@
 
 *Extra Layer for your favorite templating engine.*
 
-More details here: [https://boertel.github.com/Barbe.js](https://boertel.github.com/Barbe.js)
+More details here: [http://boertel.github.com/Barbe.js/](http://boertel.github.com/Barbe.js/)
 
 The main features are:
 
@@ -17,6 +17,7 @@ same as ICanHaz.js - [https://github.com/HenrikJoreteg/ICanHaz.js](https://githu
 
     success: function (response) {
         ...
+        return response;
     }
 
 ### Insert automatically a loader during an ajax call
