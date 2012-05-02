@@ -6,6 +6,7 @@
 (function () {
     "Barbe:nomunge";
     var Barbe = {
+        version: "0.0.1",
         html: {},
         templates: {},
         settings: {
