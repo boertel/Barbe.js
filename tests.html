@@ -227,43 +227,46 @@ Barbe.settings.template.compile = function (template, context, partials, name) {
 };
 */
 
-new Barbe.View("template_static").grow();
+$(document).ready(function () {
+    console.log("jquery ready");
+    new Barbe.View("template_static").grow();
 
-new Barbe.View("template_partial").grow();
+    new Barbe.View("template_partial").grow();
 
-new Barbe.View("template_basic", {data: {name: "Barbe.js"}}).grow();
+    new Barbe.View("template_basic", {data: {name: "Barbe.js"}}).grow();
 
-new Barbe.View("template_anchor", {data: {name: "Barbe.js"}}, "anchor_anchor").grow();
+    new Barbe.View("template_anchor", {data: {name: "Barbe.js"}}, "anchor_anchor").grow();
 
-new Barbe.View("template_success", {
-    data: {name: "Barbe.js"},
-    success: function (response) {
-        response.nameUpperCase = response.name.toUpperCase();
-        return response;
-    }
-}, {anchor: "anchor_success"}).grow();
+    new Barbe.View("template_success", {
+        data: {name: "Barbe.js"},
+        success: function (response) {
+            response.nameUpperCase = response.name.toUpperCase();
+            return response;
+        }
+    }, {anchor: "anchor_success"}).grow();
 
-new Barbe.View("template_success", {
-    data: {name: "Barbe.js"},
-    success: function (response) {
-        response.nameUpperCase = response.name.toUpperCase();
-        return response;
-    }
-}).grow();
+    new Barbe.View("template_success", {
+        data: {name: "Barbe.js"},
+        success: function (response) {
+            response.nameUpperCase = response.name.toUpperCase();
+            return response;
+        }
+    }).grow();
 
-new Barbe.View("template_api", {
-    url: "https://api.github.com/users/boertel",
-    dataType: "jsonp"
-}).grow();
+    new Barbe.View("template_api", {
+        url: "https://api.github.com/users/boertel",
+        dataType: "jsonp"
+    }).grow();
 
-new Barbe.View("template_api_advanced", {
-    url: "https://api.github.com/users/boertel",
-    dataType: "jsonp",
-    success: function (response) {
-        response.data.created_at = new Date(response.data.created_at);
-        return response;
-    }
-}).grow();
+    new Barbe.View("template_api_advanced", {
+        url: "https://api.github.com/users/boertel",
+        dataType: "jsonp",
+        success: function (response) {
+            response.data.created_at = new Date(response.data.created_at);
+            return response;
+        }
+    }).grow();
+});
 </script>
 
 </body>

@@ -118,10 +118,12 @@ Barbe.settings.ajax = myProxyFunction;
 <p>By default, Barbe is using <a href="https://github.com/janl/mustache.js" target="_blank">Mustache</a> but you can use your favorite templating engine such as <a href="http://twitter.github.com/hogan.js/" target="_blank">Hogan</a> or <a href="http://handlebarsjs.com/" target="_blank">Handlerbars</a>. These two templating engine provide a way to compile your template before rendering them, in that case, you need to define the template settings as following:</p>
 <div class="code" data-language="javascript">
 <code><span class="comment">// Function that compiles the template</span>
-Barbe.settings.template.compile = hogan.compile;
+Barbe.settings.template.compile = function (str) {
+    return Hogan.compile(str);
+};
 <span class="comment">// Function that render the template with data.</span>
-Barbe.settings.template.render = function (template, data, partials) {
-    template.render(data, partials);
+Barbe.settings.template.render = function (self, context, partials) {
+    return self.render(context, partials);
 };
 <span class="comment">// Type to identify templates.</span>
 Barbe.settings.template.type = ["text/html"];</code>
