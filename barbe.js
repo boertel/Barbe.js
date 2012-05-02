@@ -226,8 +226,6 @@
 
     window.Barbe = Barbe;
 
-    document.addEventListener('DOMContentLoaded', function () {
-        Barbe.grab();
-    }, true);
+    Barbe.grab();
     
 })();
