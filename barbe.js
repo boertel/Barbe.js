@@ -163,10 +163,18 @@
     Barbe.View.prototype.ajax = function (callback) {
         var that = this;
 
-        var provider = this.provider.success;
+        var providerSuccess = this.provider.success;
         var monkeySuccess = function (response) {
-            if (provider !== undefined) {
-                response = provider.call(that, response);
+            if (providerSuccess !== undefined) {
+                response = providerSuccess.call(that, response);
+            }
+            that.castAnchor.call(that, response, callback);
+        };
+
+        var providerError = this.provider.error;
+        var monkeyError = function (response) {
+            if (providerError !== undefined) {
+                response = providerError.call(that, response);
             }
             that.castAnchor.call(that, response, callback);
         };
