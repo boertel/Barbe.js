@@ -110,7 +110,8 @@ footer ul, nav ul {
 }
 nav {
     border-top: 1px solid #e3e3e3;
-    padding-top: 15px;
+    border-bottom: 1px solid #e3e3e3;
+    padding: 15px 0;
     text-align: center;
 }
 footer ul li, nav ul li {
