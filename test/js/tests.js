@@ -1,3 +1,8 @@
+// Barbe settings:
+Barbe.init({
+    autoLoad: false
+});
+
 module("Rendering");
 
 test("static template", 1, function () {

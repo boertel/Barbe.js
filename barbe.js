@@ -3,7 +3,7 @@
  * @date: 01/01/2012
  * 
 */
-(function () {
+(function (window, undefined) {
     "Barbe:nomunge";
     var Barbe = {
         version: "0.0.1",
@@ -26,6 +26,7 @@
                 },
                 type: ['text/html']
             },
+            autoLoad: true,
             ajax: $.ajax,
             loader: {
                 className: "barbe-loader",
@@ -71,11 +72,21 @@
         /**
          * Parse the html to collect templates defined by <script type="<Barbe.settings.template.type>" id="" [data-anchor=""]></script>
          */
-        grab: function () {
-            scripts = document.scripts || document.getElementsByTagName('script');
-            for(var i = 0, len = scripts.length; i < len; i++) {
-                var s = scripts[i];
-                if (Barbe.settings.template.type.indexOf(s.type) !== -1) {
+        grab: function (id) {
+            var s;
+            if (id === undefined) {
+                // grab all templates
+                scripts = document.scripts || document.getElementsByTagName('script');
+                for(var i = 0, len = scripts.length; i < len; i++) {
+                    s = scripts[i];
+                    if (Barbe.settings.template.type.indexOf(s.type) !== -1) {
+                        Barbe.add(s.id, s.innerHTML, s.getAttribute("data-anchor"));
+                    }
+                }
+            } else {
+                // grab a specific template
+                s = document.getElementById(id);
+                if (s !== null) {
                     Barbe.add(s.id, s.innerHTML, s.getAttribute("data-anchor"));
                 }
             }
@@ -91,6 +102,9 @@
      * @param [args.anchor]  {string} id of the anchor (overwrite the one defined on the template script tag)
      */
     Barbe.View = function (template, provider, args) {
+        if (template !== undefined && Barbe.templates[template] === undefined) {
+            Barbe.grab(template);
+        }
         if (template === undefined || Barbe.templates[template] === undefined) {
             throw "[Barbe] template #" + template + " not found.";
         }
@@ -125,8 +139,8 @@
      * @param response {object} data that populates the template
      */
     Barbe.View.prototype.render = function (response) {
-        // Mustache doesn't like array as data, so we have to create 
-        // a dumb object named "array" that contained the array
+        /* Mustache doesn't like array as data, so we have to create 
+        a dumb object named "array" that contained the array */
         if (typeof response === "undefined") {
             response = this.provider.data;
         }
@@ -224,8 +238,24 @@
         this.anchor.removeChild(this.div);
     };
 
-    window.Barbe = Barbe;
 
-    Barbe.grab();
+    /**
+     * Initialize settings before grabbing templates
+     * @param settings  {object}    see Barbe.settings
+     */
+    Barbe.init = function (settings) {
+        for (var key in settings) {
+            value = settings[key];
+            if (Barbe.settings[key] !== undefined) {
+                Barbe.settings[key] = value;
+            }
+        }
+
+        if (Barbe.settings.autoLoad) {
+            Barbe.grab();
+        }
+    };
+
+    window.Barbe = Barbe;
     
-})();
+})(window);
