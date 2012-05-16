@@ -95,11 +95,12 @@
 
     /**
      * Constructor
-     * @param template       {string} template name
-     * @param provider.data  {object} data that populates the template
-     * @param provider.url   {string} url of the api
-     * @param provider.*     {*}      parameters for the ajax function
-     * @param [args.anchor]  {string} id of the anchor (overwrite the one defined on the template script tag)
+     * @param template              {string}    template name
+     * @param provider.data         {object}    data that populates the template
+     * @param provider.url          {string}    url of the api
+     * @param provider.*            {*}         parameters for the ajax function
+     * @param [args.anchor]         {string}    id of the anchor (overwrite the one defined on the template script tag)
+     * @param [args.loader=true]    {boolean}   show/hide the loader
      */
     Barbe.View = function (template, provider, args) {
         if (template !== undefined && Barbe.templates[template] === undefined) {
@@ -120,7 +121,13 @@
             anchor = args.anchor;
             delete args.anchor;
             this.options = args;
+            this.options.loader = args.loader || true;
         }
+
+        if (Barbe.settings.loader === false) {
+            this.options.loader = false;
+        }
+
 
         if (anchor !== undefined) {
             this.anchor = document.getElementById(anchor);
@@ -205,7 +212,7 @@
      */
     Barbe.View.prototype.grow = function (callback) {
         if (this.provider.url !== undefined) {
-            if (Barbe.settings.loader !== false) {
+            if (this.options.loader !== false) {
                 this.loader = new Barbe.Loader(this.anchor);
             }
             this.ajax.call(this, callback);
