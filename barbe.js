@@ -149,14 +149,13 @@
             anchor = args.anchor;
             delete args.anchor;
             this.options = args;
-            this.options.Loader = (args.Loader === true) ? Barbe.settings.Loader : args.Loader;
+            this.options.Loader = (args.Loader === true || args.Loader === undefined) ? Barbe.settings.Loader : args.Loader;
         }
 
         // Is the Loader a valid object?
-        if (this.options.Loader !== false) {
-            if (typeof this.options.Loader !== "function" || this.options.Loader.prototype.remove === undefined) {
-                throw "[Barbe] Invalid Loader";
-            }
+        if (this.options.Loader !== false && 
+                (typeof this.options.Loader !== "function" || this.options.Loader.prototype.remove === undefined)) {
+            throw "[Barbe] Invalid Loader";
         }
 
         if (anchor !== undefined) {
