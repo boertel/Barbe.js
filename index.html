@@ -44,7 +44,8 @@
 
 <h3>3. Initialize the template</h3>
 <div class="code" data-language="javascript">
-<code>new Barbe.View("<span class="my_template">my_template</span>", {
+<code>Barbe.init();   <span class="comment">// Initialize Barbe (only once)</span>
+new Barbe.View("<span class="my_template">my_template</span>", {
     data: {name: "<span class="barbe">Barbe.js</span>"}
 }).grow();
 </code>
@@ -62,7 +63,8 @@
 <p>Check out this page, to have more <a href="//boertel.github.com/Barbe.js/tests.html">examples</a>.</p>
 
 
-<h2 id="options">More Options</h2>
+
+<h2 id="options">Playing with the View</h2>
 
 <h5>Populate a template with an API response</h5>
 <p>Most of the populated templates use an API response, that's why Barbe provides a easy way to populate the templates. And in bonus, a loader<sup><a href="#loader"></a></sup> is automatically inserted inside the anchor during the API call.</p>
@@ -93,10 +95,36 @@
 });</code>
 </div>
 
+
+<h5>Specify the anchor when creating the View</h5>
+<p>In the previous examples, the anchor was defined in the <code>script</code> tag, but for some reasons you may want to define it dynamically in Javascript.</p>
+
+<div class="code" data-language="javascript">
+<code><span class="comment">// with a string</span>
+var view = new Barbe.View("template-id", {}, <strong>"anchor-id"</strong>);
+<span class="comment">// or a dictionary</span>
+var view = new Barbe.View("template-id", {}, {
+    <strong>anchor: "anchor-id"</strong>
+});
+</code>
+</div>
+
+
+
+<h2 id="options">More Options</h2>
+<p>When you initialize Barbe with the function <code>init</code>, you can set bunch of parameters.</p>
+<div class="code" data-language="javascript">
+<code>var settings = {};
+Barbe.init(settings);</code>
+</div>
+
+
 <h5 id="ajax">Use your favorite/own ajax function</h5>
 <p>By default, Barbe.js uses the jQuery function <code>$.ajax</code> to do ajax calls. If for some reasons, you need to use your own function, you can update Barbe settings:
 <div class="code" data-language="javascript">
-<code>Barbe.settings.ajax = $.ajax;</code>
+<code>Barbe.init({
+    ajax: $.ajax
+});</code>
 </div>
 <p>But careful, the second parameter of the <code>Barbe.View</code> constructor is the parameter that will be use by the ajax function. You may need to create a proxy function that take jQuery-like object and call your own function.
 
@@ -109,7 +137,9 @@ var myProxyFunction = function (args) {
     myAjaxFunction(args.url, args.data, args.success, args.method);
 };
 
-Barbe.settings.ajax = myProxyFunction;
+Barbe.init({
+    ajax: myProxyFunction
+});
 </code>
 </div>
 
@@ -117,27 +147,66 @@ Barbe.settings.ajax = myProxyFunction;
 <h5>Use another templating engine</h5>
 <p>By default, Barbe is using <a href="https://github.com/janl/mustache.js" target="_blank">Mustache</a> but you can use your favorite templating engine such as <a href="http://twitter.github.com/hogan.js/" target="_blank">Hogan</a> or <a href="http://handlebarsjs.com/" target="_blank">Handlerbars</a>. These two templating engine provide a way to compile your template before rendering them, in that case, you need to define the template settings as following:</p>
 <div class="code" data-language="javascript">
-<code><span class="comment">// Function that compiles the template</span>
-Barbe.settings.template.compile = function (str) {
-    return Hogan.compile(str);
+<code>var hoganTemplate = {
+    <span class="comment">// Function that compiles the template</span>
+    compile: function (str) {
+        return Hogan.compile(str);
+    },
+    <span class="comment">// Function that render the template with data.</span>
+    render: function (self, context, partials) {
+        return self.render(context, partials);
+    },
+    <span class="comment">// Type to identify templates.</span>
+    type: ["text/html"];
 };
-<span class="comment">// Function that render the template with data.</span>
-Barbe.settings.template.render = function (self, context, partials) {
-    return self.render(context, partials);
-};
-<span class="comment">// Type to identify templates.</span>
-Barbe.settings.template.type = ["text/html"];</code>
+
+Barbe.init({
+    template: hoganTemplate
+});</code>
 </div>
 
 
 <h5>Integrated loader</h5>
-<p>During ajax calls (that can take a while for slow APIs), it's better to notify users that something is happening, they just need to hang out here and wait. Barbe takes care of putting a loader (basically this piece of code: <code>&lt;div class="barbe-loader" id="barbe_loader"&gt;&lt;/div&gt;</code>) in the anchor and replace it by the template at the end of the call. Here are the differents settings you can define for the loader:</p>
+<p>During ajax calls (that can take a while for slow APIs), it's better to notify users that something is happening, they just need to hang out here and wait. Barbe takes care of putting a loader (basically this piece of code: <code>&lt;div class="barbe-loader"&gt;&lt;/div&gt;</code>) in the anchor and replace it by the template at the end of the call.</p>
+<p>If the loader provided by default doesn't suit you, you can create your own class. It has to define only one function: <code>remove</code>, that is executed before attaching the template to the anchor.</p>
+<div class="code" data-language="javascript">
+<code><span class="comment">// Define your own class</span>
+var myLoader = function (anchor) {
+    this.div = document.createElement("div");
+    this.div.className = "my-loader";
+    this.div.innerHTML = "Loading...";
+    this.anchor = anchor;
+    this.anchor.appendChild(this.div);
+};
+myLoader.prototype.remove = function () {
+    this.anchor.appendChild(this.div);
+};
+
+Barbe.init({
+    Loader: myLoader
+});</code>
+</div>
+
+<p>Or in the case, you don't want to show this loader, you just need to say it.</p>
 <div class="code" data-language="javascript">
 <code><span class="comment">// Disable the loader</span>
-Barbe.settings.loader = false;
-<span class="comment">// Define your own class name and id and enable the loader</span>
-Barbe.settings.loader = {className: "barbe-loader", id: "barbe_loader"};</code>
+Barbe.init({
+    Loader: false
+});
+</code>
 </div>
+<p>You may also want to disable the loader or use a other class for a specific View instead of all of them. For that, use the third parameter of the constructor.
+
+<div class="code" data-language="javascript">
+<code>new Barbe.View("template-id", {}, {
+    <strong>Loader: false</strong>
+});</code>
+</div>
+
+
+<h5>Loading templates only when it's needed</h5>
+
+<p>By default, the templates are loaded into Barbe when you call <code>Barbe.init</code>. You can specify the option: <code>autoLoad</code> to <code>false</code> and the templates are loaded when you create the <code>Barbe.View</code>
 
 
 <h2 id="code">Code</h2>
