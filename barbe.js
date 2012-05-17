@@ -64,7 +64,7 @@
             }
             else {
                 if (Barbe.settings.template.compile !== undefined) {
-                    Barbe.html[name] = Barbe.settings.template.compile(str_template);
+                    Barbe.html[name] = Barbe.settings.template.compile(str_template, name);
                 } else {
                     Barbe.html[name] = str_template;
                 }

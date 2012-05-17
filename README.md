@@ -38,7 +38,6 @@ same as ICanHaz.js - [https://github.com/HenrikJoreteg/ICanHaz.js](https://githu
         type: ['text/html']
     };
 
-
     engine.hogan = {
         render: function (self, context, partials) {
             return self.render(context, partials);
@@ -53,6 +52,10 @@ same as ICanHaz.js - [https://github.com/HenrikJoreteg/ICanHaz.js](https://githu
         render: function (self, context, partials) {
             return self(context);
         },
-        compile: Handlebars.compile,
+        //compile: Handlebars.compile,
+        compile: function (str, name) {
+            Handlebars.registerPartial(name, str);
+            return Handlebars.compile(str);
+        },
         type: ['text/html']
     };
