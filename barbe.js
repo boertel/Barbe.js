@@ -153,7 +153,8 @@
             anchor = options.anchor;
             delete options.anchor;
             this.options = options;
-            this.options.Loader = (options.Loader === true || options.Loader === undefined) ? Barbe.settings.Loader : options.Loader;
+            this.options.Loader = (options.Loader === true || options.Loader === undefined) ?
+                Barbe.settings.Loader : options.Loader;
         }
 
         // Is the Loader a valid object?
