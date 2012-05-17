@@ -17,10 +17,42 @@ same as ICanHaz.js - [https://github.com/HenrikJoreteg/ICanHaz.js](https://githu
 
     success: function (response) {
         ...
-        return response;
+        [return response;]
     }
 
 ### Insert automatically a loader during an ajax call
 
     <div class="barbe-loader"></div>
 
+
+
+## More Options
+
+### Different templating engines
+
+    var engine = {};
+
+    engine.mustache = {
+        render: Mustache.to_html,
+        compile: undefined,
+        type: ['text/html']
+    };
+
+
+    engine.hogan = {
+        render: function (self, context, partials) {
+            return self.render(context, partials);
+        },
+        compile: function (str) {
+            return Hogan.compile(str);
+        },
+        type: ['text/html']
+    };
+
+    engine.handlebars = {
+        render: function (self, context, partials) {
+            return self(context);
+        },
+        compile: Handlebars.compile,
+        type: ['text/html']
+    };
