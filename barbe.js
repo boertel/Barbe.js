@@ -92,7 +92,8 @@
         },
 
         /**
-         * Parse the html to collect templates defined by <script type="<Barbe.settings.template.type>" id="" [data-anchor=""]></script>
+         * Parse the html to collect templates defined by
+         * <script type="<Barbe.settings.template.type>" id="" [data-anchor=""]></script>
          */
         grab: function (id) {
             var s;
@@ -121,7 +122,7 @@
      * @param template              {string}    template name
      * @param provider.data         {object}    data that populates the template
      * @param provider.url          {string}    url of the api
-     * @param provider.*            {*}         parameters for the ajax function
+     * @param provider.*            {*}         ajax function parameters
      * @param [args.anchor]         {string}    id of the anchor (overwrite the one defined on the template script tag)
      * @param [args.loader=true]    {boolean}   show/hide the loader
      */
@@ -249,9 +250,6 @@
             this.castAnchor(this.provider.data, callback);
         }
     };
-
-
-    
 
 
     /**
