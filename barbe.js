@@ -217,7 +217,7 @@
         var providerSuccess = this.provider.success;
         var monkeySuccess = function (response) {
             if (providerSuccess !== undefined) {
-                response = providerSuccess.call(that, response);
+                response = providerSuccess.call(that, response) || response;
             }
             that.castAnchor.call(that, response, callback);
         };
