@@ -119,14 +119,14 @@
 
     /**
      * Constructor
-     * @param template              {string}    template name
-     * @param provider.data         {object}    data that populates the template
-     * @param provider.url          {string}    url of the api
-     * @param provider.*            {*}         ajax function parameters
-     * @param [args.anchor]         {string}    id of the anchor (overwrite the one defined on the template script tag)
-     * @param [args.loader=true]    {boolean}   show/hide the loader
+     * @param template                  {string}    template name
+     * @param provider.data             {object}    data that populates the template
+     * @param provider.url              {string}    url of the api
+     * @param provider.*                {*}         ajax function parameters
+     * @param [options.anchor]          {string}    id of the anchor (overwrite the one defined on the template script tag)
+     * @param [options.loader=true]     {boolean}   show/hide the loader
      */
-    Barbe.View = function (template, provider, args) {
+    Barbe.View = function (template, provider, options) {
         if (template !== undefined && Barbe.templates[template] === undefined) {
             Barbe.grab(template);
         }
@@ -143,13 +143,13 @@
 
         var anchor;
         
-        if (typeof args === "string") {
-            anchor = args;
-        } else if (typeof args !== "undefined") {
-            anchor = args.anchor;
-            delete args.anchor;
-            this.options = args;
-            this.options.Loader = (args.Loader === true || args.Loader === undefined) ? Barbe.settings.Loader : args.Loader;
+        if (typeof options === "string") {
+            anchor = options;
+        } else if (typeof options !== "undefined") {
+            anchor = options.anchor;
+            delete options.anchor;
+            this.options = options;
+            this.options.Loader = (options.Loader === true || options.Loader === undefined) ? Barbe.settings.Loader : options.Loader;
         }
 
         // Is the Loader a valid object?
