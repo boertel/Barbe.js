@@ -51,6 +51,7 @@
                 },
                 type: ['text/html']
             },
+            removeScripts: true,
             autoLoad: true,
             ajax: $.ajax,
             Loader: Loader
@@ -94,23 +95,26 @@
         /**
          * Parse the html to collect templates defined by
          * <script type="<Barbe.settings.template.type>" id="" [data-anchor=""]></script>
+         * or grab a specific template
+         *
+         * @params [id] {string} grab a specific template
          */
         grab: function (id) {
-            var s;
+            var s, scripts = [];
+
             if (id === undefined) {
-                // grab all templates
                 scripts = document.scripts || document.getElementsByTagName('script');
-                for(var i = 0, len = scripts.length; i < len; i++) {
-                    s = scripts[i];
-                    if (Barbe.settings.template.type.indexOf(s.type) !== -1) {
-                        Barbe.add(s.id, s.innerHTML, s.getAttribute("data-anchor"));
-                    }
-                }
             } else {
-                // grab a specific template
-                s = document.getElementById(id);
-                if (s !== null) {
+                scripts.push(document.getElementById(id));
+            }
+
+            for(var i = 0, len = scripts.length; i < len; i++) {
+                s = scripts[i];
+                if (Barbe.settings.template.type.indexOf(s.type) !== -1) {
                     Barbe.add(s.id, s.innerHTML, s.getAttribute("data-anchor"));
+                    if (Barbe.settings.removeScripts !== false) {
+                        s.parentNode.removeChild(s);
+                    }
                 }
             }
         }
