@@ -5,8 +5,33 @@
 */
 (function (window, undefined) {
     "Barbe:nomunge";
+
+    /**
+     * Constructor: 
+     * @param anchor {Node} Element where the loader is added
+     */
+    var Loader = function (anchor) {
+        this.anchor = anchor;
+        this.div = document.createElement("div");
+        this.div.className = Loader.className;
+        // Clean up the anchor
+        while (this.anchor.hasChildNodes()) {
+            this.anchor.removeChild(this.anchor.lastChild);
+        }
+        this.anchor.appendChild(this.div);
+    };
+    Loader.className = "barbe-loader";
+
+    /**
+     * Remove the loader from the anchor
+     */
+    Loader.prototype.remove = function () {
+        this.anchor.removeChild(this.div);
+    };
+
+
     var Barbe = {
-        version: "0.0.1",
+        version: "0.0.2",
         html: {},
         templates: {},
         settings: {
@@ -27,12 +52,9 @@
                 type: ['text/html']
             },
             autoLoad: true,
-            ajax: $.ajax,
-            loader: {
-                className: "barbe-loader",
-                id: "barbe_loader"
-            }
+            ajax: $.ajax
         },
+        Loader: Loader,
 
         /**
          * Initalize template in a dictionary: add the render function to create the final result.
@@ -93,6 +115,7 @@
         }
     };
 
+
     /**
      * Constructor
      * @param template              {string}    template name
@@ -111,7 +134,11 @@
         }
         this.template = Barbe.templates[template].render;
         this.anchor = Barbe.templates[template].anchor;
+
         this.options = {};
+
+        // Define default options
+        this.options.loader = !!Barbe.Loader;
 
         var anchor;
         
@@ -121,13 +148,8 @@
             anchor = args.anchor;
             delete args.anchor;
             this.options = args;
-            this.options.loader = args.loader || true;
+            this.options.loader = args.loader;
         }
-
-        if (Barbe.settings.loader === false) {
-            this.options.loader = false;
-        }
-
 
         if (anchor !== undefined) {
             this.anchor = document.getElementById(anchor);
@@ -212,7 +234,7 @@
      */
     Barbe.View.prototype.grow = function (callback) {
         if (this.provider.url !== undefined) {
-            if (this.options.loader !== false) {
+            if (this.options.loader) {
                 this.loader = new Barbe.Loader(this.anchor);
             }
             this.ajax.call(this, callback);
@@ -222,28 +244,7 @@
     };
 
 
-    /**
-     * Constructor: 
-     * @param anchor {Node} Element where the loader is added
-     */
-    Barbe.Loader = function (anchor) {
-        this.anchor = anchor;
-        this.div = document.createElement("div");
-        this.div.className = Barbe.settings.loader.className;
-        this.div.id = Barbe.settings.loader.id;
-        // Clean up the anchor
-        while (this.anchor.hasChildNodes()) {
-            this.anchor.removeChild(this.anchor.lastChild);
-        }
-        this.anchor.appendChild(this.div);
-    };
-
-    /**
-     * Remove the loader from the anchor
-     */
-    Barbe.Loader.prototype.remove = function () {
-        this.anchor.removeChild(this.div);
-    };
+    
 
 
     /**
