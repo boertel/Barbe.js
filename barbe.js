@@ -138,7 +138,7 @@
         this.options = {};
 
         // Define default options
-        this.options.loader = !!Barbe.settings.Loader;
+        this.options.Loader = Barbe.settings.Loader;
 
         var anchor;
         
@@ -148,7 +148,14 @@
             anchor = args.anchor;
             delete args.anchor;
             this.options = args;
-            this.options.loader = args.loader;
+            this.options.Loader = (args.Loader === true) ? Barbe.settings.Loader : args.Loader;
+        }
+
+        // Is the Loader a valid object?
+        if (this.options.Loader !== false) {
+            if (typeof this.options.Loader !== "function" || this.options.Loader.prototype.remove === undefined) {
+                throw "[Barbe] Invalid Loader";
+            }
         }
 
         if (anchor !== undefined) {
@@ -234,8 +241,8 @@
      */
     Barbe.View.prototype.grow = function (callback) {
         if (this.provider.url !== undefined) {
-            if (this.options.loader) {
-                this.loader = new Barbe.settings.Loader(this.anchor);
+            if (this.options.Loader) {
+                this.loader = new this.options.Loader(this.anchor);
             }
             this.ajax.call(this, callback);
         } else {
