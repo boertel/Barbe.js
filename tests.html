@@ -103,7 +103,6 @@ This is a template created with {{ name }} and the data has been altered: {{ nam
     data: {name: "Barbe.js"},
     success: function (response) {
         response.nameUpperCase = response.name.toUpperCase();
-        return response;
     }
 }).grow();</code>
 </div>
@@ -157,7 +156,6 @@ This is a template created with {{ name }} and the data has been altered: {{ nam
     dataType: "jsonp",
     success: function (response) {
         response.data.created_at = new Date(response.data.created_at);
-        return response;
     }
 }).grow();</code>
 </div>
@@ -240,7 +238,6 @@ $(document).ready(function () {
         data: {name: "Barbe.js"},
         success: function (response) {
             response.nameUpperCase = response.name.toUpperCase();
-            return response;
         }
     }, {anchor: "anchor_success"}).grow();
 
@@ -248,7 +245,6 @@ $(document).ready(function () {
         data: {name: "Barbe.js"},
         success: function (response) {
             response.nameUpperCase = response.name.toUpperCase();
-            return response;
         }
     }).grow();
 
@@ -262,7 +258,6 @@ $(document).ready(function () {
         dataType: "jsonp",
         success: function (response) {
             response.data.created_at = new Date(response.data.created_at);
-            return response;
         }
     }).grow();
 });
