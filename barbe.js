@@ -52,9 +52,9 @@
                 type: ['text/html']
             },
             autoLoad: true,
-            ajax: $.ajax
+            ajax: $.ajax,
+            Loader: Loader
         },
-        Loader: Loader,
 
         /**
          * Initalize template in a dictionary: add the render function to create the final result.
@@ -138,7 +138,7 @@
         this.options = {};
 
         // Define default options
-        this.options.loader = !!Barbe.Loader;
+        this.options.loader = !!Barbe.settings.Loader;
 
         var anchor;
         
@@ -235,7 +235,7 @@
     Barbe.View.prototype.grow = function (callback) {
         if (this.provider.url !== undefined) {
             if (this.options.loader) {
-                this.loader = new Barbe.Loader(this.anchor);
+                this.loader = new Barbe.settings.Loader(this.anchor);
             }
             this.ajax.call(this, callback);
         } else {
