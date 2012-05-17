@@ -76,11 +76,12 @@
                         Barbe.templates[name].anchor = element;
                     }
                 }
-                Barbe.templates[name].render = function (data) {
+                Barbe.templates[name].render = function (data, anchor) {
                     data = data || {};
+                    anchor = anchor || Barbe.template[name].anchor;
                     var html = Barbe.settings.template.render(Barbe.html[name], data, Barbe.html);
-                    if (Barbe.templates[name].anchor !== undefined) {
-                        Barbe.templates[name].anchor.innerHTML = html;
+                    if (anchor !== undefined) {
+                        anchor.innerHTML = html;
                     }
                     return html;
                 };
@@ -134,7 +135,7 @@
         if (template === undefined || Barbe.templates[template] === undefined) {
             throw "[Barbe] template #" + template + " not found.";
         }
-        this.template = Barbe.templates[template].render;
+        this.template = template;
         this.anchor = Barbe.templates[template].anchor;
 
         this.options = {};
@@ -164,8 +165,6 @@
             this.anchor = document.getElementById(anchor);
             if (this.anchor === null) {
                 throw "[Barbe] anchor #" + anchor + " not found.";
-            } else {
-                Barbe.templates[template].anchor = this.anchor;
             }
         }
 
@@ -193,7 +192,7 @@
             };
         }
 
-        this.view = this.template(response);
+        this.view = Barbe.templates[this.template].render(response, this.anchor);
         return this.view;
     };
 
