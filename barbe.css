@@ -100,6 +100,7 @@ code {
 }
 
 footer {
+    text-align: center;
     margin: 20px 0;
     padding: 20px 10px 0 10px;
     border-top: 1px solid #ededed;

@@ -44,8 +44,7 @@
 
 <h3>3. Initialize the template</h3>
 <div class="code" data-language="javascript">
-<code>Barbe.init();   <span class="comment">// Initialize Barbe (only once)</span>
-new Barbe.View("<span class="my_template">my_template</span>", {
+<code>new Barbe.View("<span class="my_template">my_template</span>", {
     data: {name: "<span class="barbe">Barbe.js</span>"}
 }).grow();
 </code>
@@ -212,9 +211,9 @@ Barbe.init({
 </div>
 
 
-<h5>Loading templates only when it's needed</h5>
+<h5>How templates are loaded</h5>
 
-<p>By default, the templates are loaded into Barbe when you call <code>Barbe.init</code>. You can specify the option: <code>autoLoad</code> to <code>false</code> and the templates are loaded when you create the <code>Barbe.View</code>
+<p>By default, the templates are loaded when you create the <code>Barbe.View</code>. You can specify the option: <code>autoLoad</code> to <code>true</code> and the templates are loaded when <code>Barbe.init</code> is called.
 
 
 <h2 id="code">Code</h2>
@@ -223,9 +222,11 @@ Barbe.init({
 <footer>
     <ul>
         <li><a href="https://twitter.com/boertel" class="twitter-follow-button" data-show-count="false" data-size="large">Follow @boertel</a></li>
+        <li><iframe src="http://markdotto.github.com/github-buttons/github-btn.html?user=boertel&repo=Barbe.js&type=watch&size=large" allowtransparency="true" frameborder="0" scrolling="0" width="170px" height="30px"></iframe></li>
     </ul>
 </footer>
 
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
 
 <script type="text/javascript" src="./js/jquery-1.7.1.min.js"></script>
 <script type="text/javascript" src="./js/mustache.js"></script>
