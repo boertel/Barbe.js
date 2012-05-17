@@ -8,6 +8,7 @@
 
     /**
      * Constructor: 
+     *
      * @param anchor {Node} Element where the loader is added
      */
     var Loader = function (anchor) {
@@ -35,13 +36,6 @@
         html: {},
         templates: {},
         settings: {
-            /*
-            template: {
-                render: Mustache.render,
-                compile: undefined,
-                type: ['text/html']
-            },
-            */
             template: {
                 render: function (self, context, partials) {
                     return self.render(context, partials);
@@ -52,13 +46,14 @@
                 type: ['text/html']
             },
             removeScripts: true,
-            autoLoad: true,
+            autoLoad: false,
             ajax: $.ajax,
             Loader: Loader
         },
 
         /**
          * Initalize template in a dictionary: add the render function to create the final result.
+         *
          * @param name         {string} name of the template
          * @param str_template {string} template itself
          * @param [anchor]     {string} id of the anchor
@@ -110,7 +105,8 @@
 
             for(var i = 0, len = scripts.length; i < len; i++) {
                 s = scripts[i];
-                if (Barbe.settings.template.type.indexOf(s.type) !== -1) {
+
+                if (s !== undefined && Barbe.settings.template.type.indexOf(s.type) !== -1) {
                     Barbe.add(s.id, s.innerHTML, s.getAttribute("data-anchor"));
                     if (Barbe.settings.removeScripts !== false) {
                         s.parentNode.removeChild(s);
@@ -123,6 +119,7 @@
 
     /**
      * Constructor
+     *
      * @param template                  {string}    template name
      * @param provider.data             {object}    data that populates the template
      * @param provider.url              {string}    url of the api
@@ -177,6 +174,7 @@
 
     /**
      * Populate the template with the data. Create a dumb object {array: data} if data is an array
+     *
      * @param response {object} data that populates the template
      */
     Barbe.View.prototype.render = function (response) {
@@ -201,6 +199,7 @@
 
     /**
      *  Render the template with the response and attach it to the anchor
+     *
      *  @params response {object}       api response or data for the template
      *  @params callback {castAnchor}   function called after
      */
@@ -214,6 +213,7 @@
 
     /**
      * Process the ajax call 
+     *
      * @param callback {function} function executed when the ajax call successed and the template has been populated
      */
     Barbe.View.prototype.ajax = function (callback) {
@@ -242,6 +242,7 @@
 
     /**
      * Run Barbe to populate the template and attach it the anchor
+     *
      * @param callback {function} function executed when the ajax call successed and the template has been populated
      */
     Barbe.View.prototype.grow = function (callback) {
@@ -258,6 +259,7 @@
 
     /**
      * Initialize settings before grabbing templates
+     *
      * @param settings  {object}    see Barbe.settings
      */
     Barbe.init = function (settings) {
