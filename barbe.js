@@ -106,7 +106,7 @@
             for(var i = 0, len = scripts.length; i < len; i++) {
                 s = scripts[i];
 
-                if (s !== undefined && Barbe.settings.template.type.indexOf(s.type) !== -1) {
+                if (s !== undefined && s !== null && Barbe.settings.template.type.indexOf(s.type) !== -1) {
                     Barbe.add(s.id, s.innerHTML, s.getAttribute("data-anchor"));
                     if (Barbe.settings.removeScripts !== false) {
                         s.parentNode.removeChild(s);
