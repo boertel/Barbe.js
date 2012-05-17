@@ -66,6 +66,15 @@ new Barbe.View("<span class="my_template">my_template</span>", {
 
 <h2 id="options">Playing with the View</h2>
 
+<p>Constructor signature:</p>
+<div class="code" data-language="javascript">
+<code>Barbe.View(
+    {string} template id,
+    {object} provider,
+    [{object} options| {string} anchor id]
+)</code>
+</div>
+
 <h5>Populate a template with an API response</h5>
 <p>Most of the populated templates use an API response, that's why Barbe provides a easy way to populate the templates. And in bonus, a loader<sup><a href="#loader"></a></sup> is automatically inserted inside the anchor during the API call.</p>
 <div class="code" data-language="javascript">
@@ -73,12 +82,12 @@ new Barbe.View("<span class="my_template">my_template</span>", {
     url: "/api/v1/user",
     success: function (response) {
         <span class="comment">/* ... */</span>
-        <strong>return response;</strong>
+        [return object;]
     }
 });
 </code>
 </div>
-<p><em>Note</em>: the second parameter, called <code>provider</code>, is almost the same object that will be passed to the jQuery <code>$.ajax</code> function<sup><a href="#ajax"></a></sup>. The <code>success</code> is overwritten to take the <code>response</code> and use it as data by the templating engine to create the HTML version of the template, so don't forget to <code>return response;</code> at the end of the function, otherwise the template will not get the data.</p>
+<p><em>Note</em>: the second parameter, called <code>provider</code>, is almost the same object that will be passed to the jQuery <code>$.ajax</code> function<sup><a href="#ajax"></a></sup>. The <code>success</code> is overwritten to take the <code>response</code> and use it as data by the templating engine to create the HTML version of the template. You can directly modify the <code>response</code> object or <code>return object;</code> at the end of the function if you want to return something else to the template.</p>
 
 
 <h5>Execute a function on the response</h5>
@@ -90,7 +99,6 @@ new Barbe.View("<span class="my_template">my_template</span>", {
         for (var i = 0; i < response.length; i++) {
             response[i].nameUpperCase = response[i].name.toUpperCase();
         }
-        return response;
     }
 });</code>
 </div>
@@ -166,7 +174,7 @@ Barbe.init({
 </div>
 
 
-<h5>Integrated loader</h5>
+<h5 id="loader">Integrated loader</h5>
 <p>During ajax calls (that can take a while for slow APIs), it's better to notify users that something is happening, they just need to hang out here and wait. Barbe takes care of putting a loader (basically this piece of code: <code>&lt;div class="barbe-loader"&gt;&lt;/div&gt;</code>) in the anchor and replace it by the template at the end of the call.</p>
 <p>If the loader provided by default doesn't suit you, you can create your own class. It has to define only one function: <code>remove</code>, that is executed before attaching the template to the anchor.</p>
 <div class="code" data-language="javascript">
