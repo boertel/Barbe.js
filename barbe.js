@@ -237,6 +237,7 @@
 
         that.ajaxParams = this.provider;
         that.ajaxParams.success = monkeySuccess;
+        that.ajaxParams.error = monkeyError;
         Barbe.settings.ajax(that.ajaxParams);
     };
 
