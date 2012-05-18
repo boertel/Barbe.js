@@ -78,7 +78,7 @@
                 }
                 Barbe.templates[name].render = function (data, anchor) {
                     data = data || {};
-                    anchor = anchor || Barbe.template[name].anchor;
+                    anchor = anchor || Barbe.templates[name].anchor;
                     var html = Barbe.settings.template.render(Barbe.html[name], data, Barbe.html);
                     if (anchor !== undefined) {
                         anchor.innerHTML = html;
