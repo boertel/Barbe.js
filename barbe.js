@@ -217,27 +217,36 @@
      */
     Barbe.View.prototype.ajax = function (callback) {
         var that = this;
+        if (typeof this.provider === "function") {
+            // Specific asynchronous function for this View
+            var monkeyProvider = function (response) {
+                that.castAnchor.call(that, response, callback);
+            };
+            this.provider.call(this, monkeyProvider);
+        } else {
+            // Use the global ajax function
+            var providerSuccess = this.provider.success;
+            var monkeySuccess = function (response) {
+                if (providerSuccess !== undefined) {
+                    response = providerSuccess.call(that, response) || response;
+                }
+                that.castAnchor.call(that, response, callback);
+            };
 
-        var providerSuccess = this.provider.success;
-        var monkeySuccess = function (response) {
-            if (providerSuccess !== undefined) {
-                response = providerSuccess.call(that, response) || response;
-            }
-            that.castAnchor.call(that, response, callback);
-        };
+            var providerError = this.provider.error;
+            var monkeyError = function (response) {
+                if (providerError !== undefined) {
+                    response = providerError.call(that, response);
+                }
+                that.castAnchor.call(that, response, callback);
+            };
 
-        var providerError = this.provider.error;
-        var monkeyError = function (response) {
-            if (providerError !== undefined) {
-                response = providerError.call(that, response);
-            }
-            that.castAnchor.call(that, response, callback);
-        };
+            that.ajaxParams = this.provider;
+            that.ajaxParams.success = monkeySuccess;
+            that.ajaxParams.error = monkeyError;
 
-        that.ajaxParams = this.provider;
-        that.ajaxParams.success = monkeySuccess;
-        that.ajaxParams.error = monkeyError;
-        Barbe.settings.ajax(that.ajaxParams);
+            Barbe.settings.ajax(that.ajaxParams);
+        }
     };
 
     /**
@@ -246,7 +255,7 @@
      * @param callback {function} function executed when the ajax call successed and the template has been populated
      */
     Barbe.View.prototype.grow = function (callback) {
-        if (this.provider.url !== undefined) {
+        if (typeof this.provider === "function" || this.provider.url !== undefined) {
             if (this.options.Loader) {
                 this.loader = new this.options.Loader(this.anchor);
             }
