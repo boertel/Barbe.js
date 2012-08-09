@@ -34,7 +34,10 @@ pre {
     margin: 0;
     white-space: pre-wrap;
 }
-.barbe, a, a:visited, a:active {
+h1:hover {
+    cursor: pointer;
+}
+h1:hover, .barbe, a, a:visited, a:active {
     color: #7B4A12;
 }
 a:hover {
