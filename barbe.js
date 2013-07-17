@@ -1,13 +1,13 @@
-/* 
+/*
  * @author: Benjamin Oertel (https://github.com/boertel)
  * @date: 01/01/2012
- * 
+ *
 */
 (function (window, undefined) {
     "Barbe:nomunge";
 
     /**
-     * Constructor: 
+     * Constructor:
      *
      * @param anchor {Node} Element where the loader is added
      */
@@ -144,7 +144,7 @@
         this.options.Loader = Barbe.settings.Loader;
 
         var anchor;
-        
+
         if (typeof options === "string") {
             anchor = options;
         } else if (typeof options !== "undefined") {
@@ -156,7 +156,7 @@
         }
 
         // Is the Loader a valid object?
-        if (this.options.Loader !== false && 
+        if (this.options.Loader !== false &&
                 (typeof this.options.Loader !== "function" || this.options.Loader.prototype.remove === undefined)) {
             throw "[Barbe] Invalid Loader";
         }
@@ -177,7 +177,7 @@
      * @param response {object} data that populates the template
      */
     Barbe.View.prototype.render = function (response) {
-        /* Mustache doesn't like array as data, so we have to create 
+        /* Mustache doesn't like array as data, so we have to create
         a dumb object named "array" that contained the array */
         if (typeof response === "undefined") {
             response = this.provider.data;
@@ -211,7 +211,7 @@
 
 
     /**
-     * Process the ajax call 
+     * Process the ajax call
      *
      * @param callback {function} function executed when the ajax call successed and the template has been populated
      */
@@ -285,5 +285,5 @@
     };
 
     window.Barbe = Barbe;
-    
+
 })(window);
