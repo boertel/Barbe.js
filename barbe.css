@@ -10,6 +10,7 @@ body {
 h1, h2, h3, h4, h5, h6 {
     margin: 0;
     font-family: "Lustria", serif;
+    -webkit-font-smoothing: antialiased;
 }
 h1 {
     font-size: 70px;
@@ -51,6 +52,18 @@ ul li {
 }
 sup {
     margin-left: 3px;
+}
+
+a.button {
+    padding: 8px 16px;
+    background-color: #7B4A12;
+    color: #fff;
+    border-radius: 4px;
+}
+a.button:active,
+a.button:hover {
+    background-color: #BA6222;
+    color: #fff;
 }
 
 .clearfix:after { content: "."; display: block; height: 0; clear: both; visibility: hidden; }
@@ -102,6 +115,9 @@ code {
     color: #f56600;
 }
 
+.text-center {
+    text-align: center;
+}
 footer {
     text-align: center;
     margin: 20px 0;
@@ -117,6 +133,7 @@ nav {
     border-bottom: 1px solid #e3e3e3;
     padding: 15px 0;
     text-align: center;
+    margin-top: 30px;
 }
 footer ul li, nav ul li {
     list-style-type: none;
