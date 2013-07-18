@@ -136,7 +136,7 @@ nav {
     text-align: center;
     margin-top: 30px;
 }
-footer ul li {
+footer ul li, nav ul li {
     list-style-type: none;
     display: inline;
 }
