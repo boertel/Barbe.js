@@ -59,6 +59,7 @@ a.button {
     background-color: #7B4A12;
     color: #fff;
     border-radius: 4px;
+    text-decoration: none;
 }
 a.button:active,
 a.button:hover {
