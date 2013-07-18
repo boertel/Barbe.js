@@ -136,8 +136,10 @@ nav {
     text-align: center;
     margin-top: 30px;
 }
-footer ul li, nav ul li {
+footer ul li {
     list-style-type: none;
     display: inline;
+}
+nav ul li {
     margin-right: 20px;
 }
