@@ -25,6 +25,13 @@ test("altered response", 1, function () {
     equal(new Barbe.View("template-alteration", {data: {name: "Barbe.js"}, success: cb}).render(), "This is a template created with Barbe.js and the data has been altered: BARBE.JS.");
 });
 
+test("altered response without returning a response", 1, function () {
+    var cb = function (response) {
+        response.nameUpperCase = response.name.toUpperCase();
+    };
+    equal(new Barbe.View("template-alteration", {data: {name: "Barbe.js"}, success: cb}).render(), "This is a template created with Barbe.js and the data has been altered: BARBE.JS.");
+});
+
 module("Anchor");
 
 test("defines in javascript", 1, function () {
@@ -55,6 +62,20 @@ asyncTest("get data", 1, function () {
 });
 
 asyncTest("altering response", 1, function () {
+    var view = new Barbe.View("template-api-advanced", {
+        url: "https://api.github.com/users/boertel",
+        dataType: "jsonp",
+        success: function (response) {
+            response.data.name = response.data.name.toUpperCase();
+            return response;
+        }
+    }).grow(function () {
+        start();
+        equal($("#anchor-api-advanced").html(), "BENJAMIN OERTEL");
+    });
+});
+
+asyncTest("altering response without returning a response", 1, function () {
     var view = new Barbe.View("template-api-advanced", {
         url: "https://api.github.com/users/boertel",
         dataType: "jsonp",

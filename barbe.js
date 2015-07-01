@@ -32,7 +32,7 @@
 
 
     var Barbe = {
-        version: "0.0.2",
+        version: "0.0.3",
         html: {},
         templates: {},
         settings: {
@@ -183,7 +183,7 @@
             response = this.provider.data;
         }
         if (this.provider.url === undefined && this.provider.success !== undefined) {
-            response = this.provider.success(response);
+            response = this.provider.success(response) || response;
         }
 
         if (Object.prototype.toString.call(response) === '[object Array]') {
